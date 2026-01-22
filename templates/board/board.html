@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>タイプ別掲示板</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'css/board.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <!-- CSRFトークン -->
+  <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body>
+
+<!-- =========================
+  ヘッダー
+========================= -->
+<header class="header">
+  <a href="{% url 'board:index' %}" id="logo-link">
+    <img src="{% static 'img/logo.png' %}" alt="掲示板ロゴ">
+  </a>
+
+  <div class="header-center">
+    <nav class="nav-item">
+      <a href="{% url 'board:index' %}" class="nav-link">掲示板</a>
+    </nav>
+    <nav class="nav-item">
+      <a href="{% url 'board:characters' %}" class="nav-link">キャラクター一覧</a>
+    </nav>
+  </div>
+</header>
+
+<!-- =========================
+  メインコンテンツ
+========================= -->
+<div class="board-container">
+
+  <!-- サイドパネル -->
+  <aside class="side-panel">
+    <h3>タイプ一覧</h3>
+    <div id="type-list"></div>
+  </aside>
+
+  <!-- 掲示板 -->
+  <main class="board-main">
+
+    {% if user.is_authenticated and user.profile.food_type != "undecided" %}
+
+    <section class="my-type empty">
+      <span class="label">あなたのタイプ</span>
+      <div class="my-type-card">
+        <img id="my-type-img" alt="自分のタイプ" style="display:none;">
+        <strong id="my-type-name">未診断</strong>
+        <span class="badge">あなた</span>
+      </div>
+    </section>
+    
+    
+
+
+{% endif %}
+
+
+    <!-- 掲示板タイトル -->
+    <section class="board-header">
+      <h2 id="board-title"></h2>
+      <p>同じタイプの投稿を閲覧できます</p>
+    </section>
+
+    <!-- 読み取り専用表示 -->
+    <div id="readonly" class="readonly hidden">
+      他タイプは閲覧のみ可能です
+    </div>
+
+    <!-- 投稿一覧 -->
+    <section id="post-list"></section>
+
+  </main>
+</div>
+
+<!-- 投稿ボタン -->
+<button id="fab">＋</button>
+
+<!-- 投稿モーダル -->
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+    <h2>投稿する</h2>
+    <textarea id="post-text" placeholder="内容を入力"></textarea>
+    <div class="modal-actions">
+      <button id="cancel-btn">キャンセル</button>
+      <button id="submit-btn">投稿</button>
+    </div>
+  </div>
+</div>
+
+<!-- JS -->
+<script src="{% static 'js/board.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!-- templates/accounts/profile.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>プロフィール</title>
+</head>
+<body>
+<h1>プロフィール編集</h1>
+<form method="post">
+    {% csrf_token %}
+    <label>ニックネーム: <input type="text" name="nickname" value="{{ profile.nickname }}"></label>
+    <button type="submit">更新</button>
+</form>
+<p>ユーザー名: {{ profile.user.username }}</p>
+<p><a href="{% url 'accounts:logout' %}">ログアウト</a></p>
+<p><a href="/">トップページに戻る</a></p>
+</body>
+</html>

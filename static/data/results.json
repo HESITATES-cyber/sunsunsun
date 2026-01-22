@@ -1,0 +1,239 @@
+{
+    "axes": {
+      "CS": {
+        "positive": { "code": "C", "name": "挑戦タイプ（Challenge）", "description": "新しい料理や未知の味にワクワクし、探究心が強いタイプです。" },
+        "negative": { "code": "S", "name": "安定タイプ（Stability）", "description": "慣れた味・安心できる食体験を強く好むタイプです。" }
+      },
+      "MF": {
+        "positive": { "code": "M", "name": "マナー重視タイプ（Manners）", "description": "食事の場に礼節と形式を求め、丁寧に味わうタイプです。" },
+        "negative": { "code": "F", "name": "自由タイプ（Free Style）", "description": "形式に縛られず、気楽さを大切にするタイプです。" }
+      },
+      "HE": {
+        "positive": { "code": "H", "name": "健康・質タイプ（Health/Quality）", "description": "食の質、安心感、素材選びを大切にするタイプです。" },
+        "negative": { "code": "E", "name": "手軽・効率タイプ（Ease/Efficiency）", "description": "コストや手軽さを重視し、効率的に食を楽しむタイプです。" }
+      },
+      "WX": {
+        "positive": { "code": "W", "name": "作業タイプ（Work/Task）", "description": "食事を短時間で済ませたい、実用性重視のタイプです。" },
+        "negative": { "code": "X", "name": "体験タイプ（Experience）", "description": "雰囲気・食感・体験としての食を重視するタイプです。" }
+      }
+    },
+  
+    "groups": {
+      "slow_balanced": { "label": "バランスじっくり派", "color": "#4CAF50", "bg": "#EAF7EF" },
+      "flexible_eater": { "label": "柔軟チャレンジャー", "color": "#FF9800", "bg": "#FFF3E0" },
+      "quick_sweet": { "label": "スピード甘党", "color": "#E91E63", "bg": "#FCE4EC" }
+    },
+  
+    "detail_types": {
+  
+      "CFHX": {
+        "group": "slow_balanced",
+        "name": "本能的グルメ探求家",
+        "description": "安心感を軸に、体験としての食事も大切にするタイプ。",
+        "image": "/static/img/types/cfhx.png",
+        "aruaru": ["安心できる店を選びがち","空気を壊さない選択","食事＝人との時間"],
+        "scenes": ["落ち着いた店での外食","気心の知れた人との食事","記念日ディナー"],
+        "stress": ["急かされる食事","騒がしい店","即決を求められる場面"],
+        "advice": "定番を軸に、信頼できる新店を少しずつ。",
+        "good_match": [{"code":"SMEX","reason":"価値観が近い"},{"code":"CMHX","reason":"安心感がある"}],
+        "bad_match": [{"code":"SFEX","reason":"テンポ差"},{"code":"SFEW","reason":"優先点が違う"}]
+      },
+  
+      "CFEX": {
+        "group": "slow_balanced",
+        "name": "軽やかな冒険家",
+        "description": "安心感を保ちつつ、雰囲気の良い体験を楽しむ。",
+        "image": "/static/img/types/cfex.png",
+        "aruaru": ["雰囲気重視","相手を気遣う","丁寧な食事"],
+        "scenes": ["おしゃれランチ","少人数外食","カフェ巡り"],
+        "stress": ["効率最優先の食事","騒音","無機質な店"],
+        "advice": "安心＋少しの変化が満足度UP。",
+        "good_match": [{"code":"CMEX","reason":"柔軟"},{"code":"SFHX","reason":"感覚が近い"}],
+        "bad_match": [{"code":"SMHW","reason":"効率差"},{"code":"SFEW","reason":"価値観差"}]
+      },
+  
+      "CMHX": {
+        "group": "slow_balanced",
+        "name": "意識高き食のエリート",
+        "description": "質・空間・安心感のバランス重視。",
+        "image": "/static/img/types/cmhx.png",
+        "aruaru": ["下調べする","質に妥協しない","雰囲気も重視"],
+        "scenes": ["評判店","静かなレストラン","計画的外食"],
+        "stress": ["雑な対応","即決","騒音"],
+        "advice": "事前準備が満足を高めます。",
+        "good_match": [{"code":"CFHX","reason":"価値観近い"},{"code":"CMHW","reason":"合理的"}],
+        "bad_match": [{"code":"SFEX","reason":"衝動派"},{"code":"SMEW","reason":"優先差"}]
+      },
+  
+      "CMEX": {
+        "group": "flexible_eater",
+        "name": "流行体験の社交家",
+        "description": "人と場を楽しむ体験派。",
+        "image": "/static/img/types/cmex.png",
+        "aruaru": ["話題店好き","雰囲気重視","楽しい食事"],
+        "scenes": ["友人との外食","話題店","イベント飯"],
+        "stress": ["無言の食事","効率最優先","一人黙食"],
+        "advice": "誰と食べるかを大切に。",
+        "good_match": [{"code":"CFEX","reason":"安心感"},{"code":"SMEX","reason":"共感"}],
+        "bad_match": [{"code":"SMHW","reason":"効率差"},{"code":"SFEW","reason":"温度差"}]
+      },
+  
+      "CFHW": {
+        "group": "slow_balanced",
+        "name": "フリーダムな職人",
+        "description": "日常を淡々と整える安定派。",
+        "image": "/static/img/types/cfhw.png",
+        "aruaru": ["無駄を避ける","周囲に合わせる","きちんと食"],
+        "scenes": ["定食屋","自炊","決まった店"],
+        "stress": ["衝動的な店選び","高額店","騒がしさ"],
+        "advice": "気分転換の一品を。",
+        "good_match": [{"code":"SMHW","reason":"安定"},{"code":"CMHX","reason":"価値観"}],
+        "bad_match": [{"code":"SFEX","reason":"衝動差"},{"code":"SFEW","reason":"観点差"}]
+      },
+  
+      "CFEW": {
+        "group": "flexible_eater",
+        "name": "時短のエコ・チャレンジャー",
+        "description": "効率と最低限の質を両立。",
+        "image": "/static/img/types/cfew.png",
+        "aruaru": ["即決","健康意識","リズム重視"],
+        "scenes": ["一人ランチ","忙しい日","作業食"],
+        "stress": ["長考","行列","騒音"],
+        "advice": "たまにゆっくり味わう日を。",
+        "good_match": [{"code":"CMHW","reason":"合理"},{"code":"SMEW","reason":"テンポ"}],
+        "bad_match": [{"code":"SFHX","reason":"感覚差"},{"code":"CFEX","reason":"慎重差"}]
+      },
+  
+      "CMHW": {
+        "group": "flexible_eater",
+        "name": "究極の理論派シェフ",
+        "description": "合理性最優先。",
+        "image": "/static/img/types/cmhw.png",
+        "aruaru": ["口コミ確認","定番選択","静か好き"],
+        "scenes": ["一人外食","作業ランチ","静かな店"],
+        "stress": ["感覚派同行","長時間食事","イベント飯"],
+        "advice": "直感選択も刺激になります。",
+        "good_match": [{"code":"CFEW","reason":"判断近い"},{"code":"SMHW","reason":"管理型"}],
+        "bad_match": [{"code":"SFEX","reason":"衝動派"},{"code":"CMEX","reason":"体験派"}]
+      },
+  
+      "CMEW": {
+        "group": "flexible_eater",
+        "name": "効率的な開拓者",
+        "description": "静かに迷わず。",
+        "image": "/static/img/types/cmew.png",
+        "aruaru": ["同じ物","冒険少","静かな店"],
+        "scenes": ["定番外食","一人飯","短時間食"],
+        "stress": ["にぎやか","長考","団体行動"],
+        "advice": "変化が刺激に。",
+        "good_match": [{"code":"SMEW","reason":"テンポ"},{"code":"CFEW","reason":"合理"}],
+        "bad_match": [{"code":"SFHX","reason":"感覚差"},{"code":"CFEX","reason":"慎重差"}]
+      },
+  
+      "SMHX": {
+        "group": "slow_balanced",
+        "name": "格式ある医者",
+        "description": "慎重でバランス重視。",
+        "image": "/static/img/types/smhx.png",
+        "aruaru": ["空気読む","体調優先","慎重"],
+        "scenes": ["落ち着いた外食","健康志向店","少人数"],
+        "stress": ["即断","騒音","衝動店"],
+        "advice": "自分のペースで。",
+        "good_match": [{"code":"CFHX","reason":"安心"},{"code":"SFHX","reason":"感覚"}],
+        "bad_match": [{"code":"SFEW","reason":"効率差"},{"code":"CFEW","reason":"テンポ差"}]
+      },
+  
+      "SMEX": {
+        "group": "flexible_eater",
+        "name": "安心感重視の飼育員",
+        "description": "共感力高め。",
+        "image": "/static/img/types/smex.png",
+        "aruaru": ["人優先","健康話題","モチベ飯"],
+        "scenes": ["誰かと外食","相談ランチ","共有食"],
+        "stress": ["孤食","効率優先","無関心"],
+        "advice": "自分の好みも尊重。",
+        "good_match": [{"code":"CMEX","reason":"共感"},{"code":"CFHX","reason":"安心"}],
+        "bad_match": [{"code":"SMHW","reason":"効率差"},{"code":"SFEW","reason":"温度差"}]
+      },
+  
+      "SFHX": {
+        "group": "slow_balanced",
+        "name": "マイペースな海賊",
+        "description": "感覚重視。",
+        "image": "/static/img/types/sfhx.png",
+        "aruaru": ["雰囲気重視","イベント好き","共有派"],
+        "scenes": ["イベント飯","観光食","記念日"],
+        "stress": ["作業食","即断","静かすぎ"],
+        "advice": "余白を楽しむ。",
+        "good_match": [{"code":"SMHX","reason":"感覚"},{"code":"CFEX","reason":"安心"}],
+        "bad_match": [{"code":"CFEW","reason":"効率差"},{"code":"SMEW","reason":"温度差"}]
+      },
+  
+      "SFEX": {
+        "group": "quick_sweet",
+        "name": "食の気楽な達人",
+        "description": "欲求最優先。",
+        "image": "/static/img/types/sfex.png",
+        "aruaru": ["甘党","即決","思い出重視"],
+        "scenes": ["スイーツ巡り","衝動外食","深夜飯"],
+        "stress": ["制限","説教","管理"],
+        "advice": "栄養も意識。",
+        "good_match": [{"code":"CMEX","reason":"楽しさ"},{"code":"SFHX","reason":"感覚"}],
+        "bad_match": [{"code":"CMHW","reason":"理屈"},{"code":"CFHW","reason":"安定"}]
+      },
+  
+      "SFHW": {
+        "group": "slow_balanced",
+        "name": "自炊の執事",
+        "description": "無難志向。",
+        "image": "/static/img/types/sfhw.png",
+        "aruaru": ["失敗回避","効率","無難"],
+        "scenes": ["自炊","定食","日常飯"],
+        "stress": ["衝動店","高刺激","騒音"],
+        "advice": "好みも優先。",
+        "good_match": [{"code":"SMHW","reason":"管理"},{"code":"CFHW","reason":"安定"}],
+        "bad_match": [{"code":"SFEX","reason":"衝動"},{"code":"CMEX","reason":"温度差"}]
+      },
+  
+      "SMEW": {
+        "group": "flexible_eater",
+        "name": "コスパのアサシン",
+        "description": "単独行動得意。",
+        "image": "/static/img/types/smew.png",
+        "aruaru": ["一人飯","妥協可","健康ルール"],
+        "scenes": ["一人外食","時短飯","作業食"],
+        "stress": ["長時間","イベント","団体行動"],
+        "advice": "ゆっくり食も大切。",
+        "good_match": [{"code":"CMEW","reason":"テンポ"},{"code":"CFEW","reason":"合理"}],
+        "bad_match": [{"code":"SFHX","reason":"感覚差"},{"code":"SMEX","reason":"共感重視"}]
+      },
+  
+      "SMHW": {
+        "group": "slow_balanced",
+        "name": "伝統的な管理栄養士",
+        "description": "管理と効率の両立。",
+        "image": "/static/img/types/smhw.png",
+        "aruaru": ["効率","時間管理","多少雑"],
+        "scenes": ["日常飯","作業ランチ","自炊"],
+        "stress": ["長居","イベント飯","衝動"],
+        "advice": "楽しむ余白を。",
+        "good_match": [{"code":"CFHW","reason":"安定"},{"code":"CMHW","reason":"合理"}],
+        "bad_match": [{"code":"SFEX","reason":"感覚派"},{"code":"SMEX","reason":"共感派"}]
+      },
+  
+      "SFEW": {
+        "group": "quick_sweet",
+        "name": "効率追求のコピーライター",
+        "description": "即断即決。",
+        "image": "/static/img/types/sfew.png",
+        "aruaru": ["即決","空腹優先","短時間"],
+        "scenes": ["コンビニ飯","作業食","一人飯"],
+        "stress": ["長時間","感情論","雰囲気重視"],
+        "advice": "食事を体験に。",
+        "good_match": [{"code":"CFEW","reason":"決断早"},{"code":"SMEW","reason":"単独"}],
+        "bad_match": [{"code":"CFHX","reason":"丁寧差"},{"code":"SMEX","reason":"共感差"}]
+      }
+  
+    }
+  }
+  

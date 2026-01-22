@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>🍽️ 食事タイプ診断</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<!-- ヘッダー -->
+<header class="header d-flex justify-content-between align-items-center p-2">
+  <a href="{% url 'board:index' %}" id="logo-link">
+    <img src="{% static 'img/logo.png' %}" alt="食事タイプ診断" height="50">
+  </a>
+
+  <div class="header-center">
+    <nav class="nav-item d-inline me-3">
+      <a href="{% url 'board:board' %}" class="nav-link">掲示板</a>
+    </nav>
+    <nav class="nav-item d-inline">
+      <a href="{% url 'board:characters' %}" class="nav-link">キャラクター一覧</a>
+    </nav>
+  </div>
+
+  <div class="header-right">
+    {% if user.is_authenticated %}
+      <span class="me-2">ようこそ {{ user.username }} さん</span>
+      <a href="{% url 'accounts:profile' %}" class="btn btn-sm btn-outline-primary me-2">プロフィール</a>
+      <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-danger">ログアウト</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-sm btn-outline-success me-2">ログイン</a>
+      <a href="{% url 'accounts:signup' %}" class="btn btn-sm btn-outline-primary">新規登録</a>
+    {% endif %}
+  </div>
+</header>
+
+
+<!-- ヒーロー（トップ画面） -->
+<section id="home-screen" class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">簡易 食事タイプ診断</h1>
+    <p class="hero-sub">丸をクリックして回答してください</p>
+    <button class="btn btn-primary btn-lg mt-4" id="start-btn">診断を始める</button>
+  </div>
+</section>
+
+<!-- ヒーロー直下のフル幅イラスト -->
+<section id="top-only-image" class="top-image">
+  <img src="{% static 'img/picnic.png' %}" alt="トップ画像">
+</section>
+
+<!-- メイン -->
+<div class="container">
+
+  <div class="progress-container" style="display:none;">
+    <div class="progress-bar"></div>
+  </div>
+
+  <div class="questions-container" style="display:none;"></div>
+
+  <button class="btn btn-primary btn-lg mt-4" id="diagnose-btn" style="display:none;">
+    診断結果を見る！
+  </button>
+
+  <!-- 診断結果 -->
+  <section id="result-area" class="mt-5 p-4 border rounded shadow-sm" style="display:none;">
+    <h2 class="text-center text-success">診断結果</h2>
+    <div id="result-content"></div>
+
+    <section class="personality-section">
+      <h2 class="section-title"><span class="section-number">1</span> 性格特性</h2>
+      <div id="trait-bars"></div>
+
+      <div class="scene-stress-grid">
+        <div class="scene-card">
+          <h4>🍽️ 向いている食事シーン</h4>
+          <ul id="scene-list"></ul>
+        </div>
+
+        <div class="stress-card">
+          <h4>⚠️ ストレスを感じやすい瞬間</h4>
+          <ul id="stress-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="d-grid gap-2 mt-4">
+      <button class="btn btn-outline-secondary" id="retry-btn">もう一度診断する</button>
+      <a href="{% url 'board:board' %}" class="btn btn-success" id="go-board-btn">掲示板で自分のタイプを見る</a>
+    </div>
+
+  </section>
+</div>
+
+<script src="{% static 'js/script.js' %}"></script>
+<script>
+document.getElementById("logo-link").addEventListener("click", e => {
+  e.preventDefault();
+  window.location.reload(); 
+});
+</script>
+
+</body>
+</html>

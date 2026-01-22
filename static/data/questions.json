@@ -1,0 +1,49 @@
+[
+    { "id": 1, "question": "知らない料理や新しい味を見ると試してみたくなります。", "axis": "CS", "direction": "positive" },
+    { "id": 2, "question": "いつも同じ店・同じメニューを選ぶと安心します。", "axis": "CS", "direction": "negative" },
+    { "id": 3, "question": "限定メニューや話題の料理に惹かれます。", "axis": "CS", "direction": "positive" },
+    { "id": 4, "question": "失敗しそうな料理は避けたいです。", "axis": "CS", "direction": "negative" },
+    { "id": 5, "question": "海外料理や珍しい食材にも興味があります。", "axis": "CS", "direction": "positive" },
+    { "id": 6, "question": "味の想像ができない料理は頼みにくいです。", "axis": "CS", "direction": "negative" },
+    { "id": 7, "question": "新しい食体験はワクワクします。", "axis": "CS", "direction": "positive" },
+    { "id": 8, "question": "食事では冒険より安心感を優先します。", "axis": "CS", "direction": "negative" },
+    { "id": 9, "question": "評判の良い新店には行ってみたいです。", "axis": "CS", "direction": "positive" },
+    { "id": 10, "question": "慣れた味が一番だと思います。", "axis": "CS", "direction": "negative" },
+  
+  
+    { "id": 11, "question": "食事のマナーや雰囲気は大切だと思います。", "axis": "MF", "direction": "positive" },
+    { "id": 12, "question": "食事は形式より気楽さが大事です。", "axis": "MF", "direction": "negative" },
+    { "id": 13, "question": "一緒に食べる相手や場に合わせて振る舞います。", "axis": "MF", "direction": "positive" },
+    { "id": 14, "question": "細かいマナーはあまり気にしません。", "axis": "MF", "direction": "negative" },
+    { "id": 15, "question": "きちんとした店では立ち居振る舞いを意識します。", "axis": "MF", "direction": "positive" },
+    { "id": 16, "question": "食事中はリラックスできれば十分です。", "axis": "MF", "direction": "negative" },
+    { "id": 17, "question": "周囲への配慮を忘れずに食事したいです。", "axis": "MF", "direction": "positive" },
+    { "id": 18, "question": "自分が楽しめれば周囲は気になりません。", "axis": "MF", "direction": "negative" },
+    { "id": 19, "question": "食事の場では礼儀を重んじます。", "axis": "MF", "direction": "positive" },
+    { "id": 20, "question": "食べ方に正解はないと思います。", "axis": "MF", "direction": "negative" },
+  
+  
+    { "id": 21, "question": "食材の質や安全性が気になります。", "axis": "HE", "direction": "positive" },
+    { "id": 22, "question": "多少不健康でも手軽さを優先します。", "axis": "HE", "direction": "negative" },
+    { "id": 23, "question": "栄養バランスを考えて食事を選びます。", "axis": "HE", "direction": "positive" },
+    { "id": 24, "question": "安くて早い食事が一番だと思います。", "axis": "HE", "direction": "negative" },
+    { "id": 25, "question": "体に良いものを食べたいと思います。", "axis": "HE", "direction": "positive" },
+    { "id": 26, "question": "空腹を満たせれば内容は気にしません。", "axis": "HE", "direction": "negative" },
+    { "id": 27, "question": "原材料や成分表示を見ることがあります。", "axis": "HE", "direction": "positive" },
+    { "id": 28, "question": "調理や栄養より時短を重視します。", "axis": "HE", "direction": "negative" },
+    { "id": 29, "question": "食事は体づくりの一部だと思います。", "axis": "HE", "direction": "positive" },
+    { "id": 30, "question": "コスパの良さが一番重要です。", "axis": "HE", "direction": "negative" },
+  
+  
+    { "id": 31, "question": "食事は短時間で済ませたいです。", "axis": "WX", "direction": "positive" },
+    { "id": 32, "question": "食事はゆっくり楽しむ時間だと思います。", "axis": "WX", "direction": "negative" },
+    { "id": 33, "question": "作業や仕事をしながら食べることがあります。", "axis": "WX", "direction": "positive" },
+    { "id": 34, "question": "食事中は食べることに集中したいです。", "axis": "WX", "direction": "negative" },
+    { "id": 35, "question": "食事は効率よく終えたいです。", "axis": "WX", "direction": "positive" },
+    { "id": 36, "question": "雰囲気や空間も含めて食事を楽しみたいです。", "axis": "WX", "direction": "negative" },
+    { "id": 37, "question": "食事はタスクの一つだと感じます。", "axis": "WX", "direction": "positive" },
+    { "id": 38, "question": "食事は一日の楽しみの時間です。", "axis": "WX", "direction": "negative" },
+    { "id": 39, "question": "忙しいと食事を簡単に済ませがちです。", "axis": "WX", "direction": "positive" },
+    { "id": 40, "question": "食事は体験として味わいたいです。", "axis": "WX", "direction": "negative" }
+  ]
+  
