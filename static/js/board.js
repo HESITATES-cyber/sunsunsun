@@ -33,13 +33,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const myTypeRaw = localStorage.getItem("myType");
     const myType = myTypeRaw ? myTypeRaw.toLowerCase() : null;
 
-    let currentType = null;
-  
+    //let currentType = null;
+      window.currentType = null; // ← グローバルに置く
+
     // =========================
     // データ
     // =========================
-    const posts = {};
-    GROUPS.forEach(g => g.types.forEach(t => posts[t] = []));
+    //const posts = {};
+    //GROUPS.forEach(g => g.types.forEach(t => posts[t] = []));
+    window.posts = {};
+    GROUPS.forEach(g => g.types.forEach(t => window.posts[t] = []));
+
   
     // =========================
     // DOM（★ここで必ず取得できる）
@@ -169,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     function initMyType() {
-     // =========================
+  // =========================
   // DOM が存在しないページでは何もしない
   // =========================
   const img = document.getElementById("my-type-img");
@@ -227,8 +231,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // タイプ切替（唯一の入口）
     // =========================  
     function switchType(type) {
-      if (!type) return; // ← これ重要
-      currentType = type.toLowerCase();
+      if (!type) return; // ← これ重要  
+      window.currentType = type.toLowerCase();
   
       document.querySelectorAll(".type-btn").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.type === type);
