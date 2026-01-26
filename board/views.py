@@ -85,6 +85,7 @@ def create_post(request):
 @login_required
 @csrf_exempt
 def update_delete_post(request, id):
+    print("🔥 UPDATE_DELETE_POST HIT 🔥", request.method)
     post = get_object_or_404(Post, id=id)
 
     if post.user != request.user:
@@ -148,3 +149,5 @@ def characters(request):
 # ============================
 def board_page(request):
     return render(request, "board/board.html") 
+
+print("📂 board.views loaded")
