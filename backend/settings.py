@@ -43,11 +43,11 @@ MIDDLEWARE = [
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "sg-sv.student.nics.ac.jp","http://127.0.0.1:5501",
+    "http://sg-sv.student.nics.ac.jp:8888","http://127.0.0.1:5501",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "sg-sv.student.nics.ac.jp","http://127.0.0.1:5501",
+    "http://sg-sv.student.nics.ac.jp:8888","http://127.0.0.1:5501",
 ]
 
 # ============================
