@@ -6,7 +6,7 @@ SECRET_KEY = 'django-insecure-dev-key'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["sg-sv.student.nics.ac.jp","127.0.0.1", "localhost"]
 
 # ============================
 # アプリ
@@ -43,11 +43,11 @@ MIDDLEWARE = [
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5501",
+    "sg-sv.student.nics.ac.jp","http://127.0.0.1:5501",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:5501",
+    "sg-sv.student.nics.ac.jp","http://127.0.0.1:5501",
 ]
 
 # ============================

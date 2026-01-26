@@ -40,6 +40,7 @@ staticfiles/
 Dockerfile
 compose.yaml
 .dockerignore
+docker-*.sh
 
 # IDE
 .vscode/
