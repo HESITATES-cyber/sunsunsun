@@ -3,14 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <title>ログイン</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f4f6f8;
+      font-family: sans-serif;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .login-card h1 {
+      margin: 0 0 8px;
+      text-align: center;
+    }
+
+    .login-card p {
+      margin: 0 0 24px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+
+    form p {
+      margin-bottom: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: #4f46e5;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .errorlist {
+      color: #d32f2f;
+      font-size: 13px;
+      margin-bottom: 12px;
+      padding-left: 0;
+      list-style: none;
+    }
+  </style>
 </head>
 <body>
-  <h1>ログイン</h1>
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">ログイン</button>
-  </form>
+  <div class="login-card">
+    <h1>ログイン</h1>
+    <p>ログインしてください</p>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">ログイン</button>
+    </form>
+  </div>
+
 </body>
 </html>

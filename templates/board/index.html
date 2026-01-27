@@ -16,23 +16,30 @@
   </a>
 
   <div class="header-center">
+
     <nav class="nav-item d-inline me-3">
       <a href="{% url 'board:board' %}" class="nav-link">掲示板</a>
     </nav>
-    <nav class="nav-item d-inline">
+  
+    <nav class="nav-item d-inline me-3">
       <a href="{% url 'board:characters' %}" class="nav-link">キャラクター一覧</a>
     </nav>
-  </div>
-
-  <div class="header-right">
+  
     {% if user.is_authenticated %}
-      <span class="me-2">ようこそ {{ user.username }} さん</span>
-      <a href="{% url 'accounts:profile' %}" class="btn btn-sm btn-outline-primary me-2">プロフィール</a>
-      <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-danger">ログアウト</a>
+      <!-- ログイン中 -->
+      <nav class="nav-item d-inline">
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="nav-link btn-link">ログアウト</button>
+        </form>
+      </nav>
     {% else %}
-      <a href="{% url 'login' %}" class="btn btn-sm btn-outline-success me-2">ログイン</a>
-      <a href="{% url 'accounts:signup' %}" class="btn btn-sm btn-outline-primary">新規登録</a>
+      <!-- 未ログイン -->
+      <nav class="nav-item d-inline">
+        <a href="{% url 'login' %}" class="nav-link">ログイン</a>
+      </nav>
     {% endif %}
+  
   </div>
 </header>
 
