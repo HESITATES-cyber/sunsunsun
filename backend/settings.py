@@ -12,7 +12,7 @@ ALLOWED_HOSTS = ["sg-sv.student.nics.ac.jp","127.0.0.1", "localhost"]
 # アプリ
 # ============================
 INSTALLED_APPS = [
-    "corsheaders",                     # ← これだけ
+    "corsheaders",                    
     'accounts.apps.AccountsConfig',
     "django.contrib.admin",
     "django.contrib.auth",
@@ -27,7 +27,7 @@ INSTALLED_APPS = [
 # ミドルウェア
 # ============================
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",   # ← 必ず一番上
+    "corsheaders.middleware.CorsMiddleware",   
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -43,11 +43,11 @@ MIDDLEWARE = [
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "sg-sv.student.nics.ac.jp","http://127.0.0.1:5501",
+    "https://sg-sv.student.nics.ac.jp","http://127.0.0.1:5501",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "sg-sv.student.nics.ac.jp","http://127.0.0.1:5501",
+    "https://sg-sv.student.nics.ac.jp","http://127.0.0.1:5501",
 ]
 
 # ============================

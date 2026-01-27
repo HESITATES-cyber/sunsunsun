@@ -9,6 +9,8 @@ from .models import Post
 # ============================
 # 投稿一覧（誰でもOK）
 # ============================
+print("🔥 THIS views.py IS USED 🔥")
+
 def posts_by_type(request, type):
     try:
         posts = (
@@ -93,16 +95,24 @@ def update_delete_post(request, id):
 
     if request.method == "PUT":
         body = json.loads(request.body)
-        post.text = body.get("text", post.text)
+        new_text = body.get("text")
+
+        if new_text is None or new_text.strip() == "":
+            return JsonResponse(
+                {"error": "empty text"},
+                status=400
+            )
+
+        post.text = new_text
         post.save()
+
         return JsonResponse({
-        "ok": True,
-        "id": post.id,
-        "text": post.text,
-        "time": post.created_at.strftime("%Y-%m-%d %H:%M")
+            "id": post.id,
+            "text": post.text,
+            "time": post.created_at.strftime("%Y-%m-%d %H:%M"),
         })
 
-    if request.method == "DELETE":
+    elif request.method == "DELETE":
         post.delete()
         return JsonResponse({"ok": True})
 

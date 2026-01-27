@@ -98,5 +98,56 @@
 <!-- JS -->
 <script src="{% static 'js/board.js' %}"></script>
 
+<!-- 編集モーダル -->
+<div id="edit-modal" hidden>
+  <div style="
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  ">
+    <div style="
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      min-width: 300px;
+    ">
+      <p>投稿を編集</p>
+      <textarea id="edit-text" rows="4" style="width:100%;"></textarea>
+      <div style="margin-top:10px; text-align:right;">
+        <button id="edit-ok">保存</button>
+        <button id="edit-cancel">キャンセル</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 削除確認モーダル -->
+<div id="confirm-modal" hidden>
+  <div style="
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  ">
+    <div style="
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    ">
+      <p>削除しますか？</p>
+      <button id="confirm-yes">はい</button>
+      <button id="confirm-no">キャンセル</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
