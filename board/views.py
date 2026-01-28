@@ -16,7 +16,7 @@ def posts_by_type(request, type):
         posts = (
             Post.objects
             .filter(type__iexact=type)
-            .select_related("user")
+            .select_related("user", "user__profile")
             .prefetch_related("likes")
             .order_by("-created_at")
         )
@@ -40,7 +40,9 @@ def posts_by_type(request, type):
                     request.user == p.user
                 ),
                 "user": {
+                    "id": p.user.id,
                     "nickname": profile.nickname if profile else p.user.username,
+                    "icon": profile.icon.url if profile and profile.icon else None,
                 }
             })
 
@@ -139,6 +141,18 @@ def toggle_like(request, id):
         "likes": post.likes.count()
     })
 
+def post_to_dict(post):
+    profile = post.user.profile
+    return {
+        "id": post.id,
+        "text": post.text,
+        "type": post.type,
+        "user": {
+            "id": post.user.id,
+            "nickname": profile.nickname,
+            "icon": profile.icon.url if profile.icon else None,
+        }
+    }
 
 # ============================
 # トップページ

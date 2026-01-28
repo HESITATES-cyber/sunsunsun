@@ -12,16 +12,23 @@ from django.contrib.auth import login
 
 @login_required
 def profile(request):
-    profile = request.user.profile  # すでに get_or_create 済みなので安心
+    profile = request.user.profile
 
     if request.method == "POST":
         nickname = request.POST.get("nickname", "").strip()
-        # アイコンは今回は無視するならスキップ可能
-        profile.nickname = nickname or profile.nickname
+        icon = request.FILES.get("icon")
+
+        if nickname:
+            profile.nickname = nickname
+
+        if icon:
+            profile.icon = icon
+
         profile.save()
         return redirect("accounts:profile")
 
     return render(request, "accounts/profile.html", {"profile": profile})
+
 
 def signup(request):
     if request.method == "POST":

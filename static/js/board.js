@@ -1,5 +1,5 @@
 // =====================================================
-// board.js 完全版（＋ボタンが絶対に消えない最終安定版）
+// board.js 
 // =====================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const myType = myTypeRaw ? myTypeRaw.toLowerCase() : null;
 
   //let currentType = null;
-  window.currentType = null; // ← グローバルに置く
+  window.currentType = null;
 
   // =========================
   // データ
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // =========================
-  // DOM（★ここで必ず取得できる）
+  // DOM
   // =========================
   const typeList = document.getElementById("type-list");
   const postList = document.getElementById("post-list");
@@ -338,17 +338,41 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "post";
       if (post.is_mine) div.classList.add("my-post");
-      div.innerHTML = `
-          <div class="post-meta">
-            <span class="nickname">${post.user.nickname}</span>
-            <span class="time">${post.time}</span>
-          </div>
-          <div class="post-text">${post.text}</div>
-          <div class="post-actions">
-            <button class="like-btn">❤️ ${post.likes || 0}</button>
-            ${post.is_mine ? `<button class="edit-btn">✏</button><button class="delete-btn">🗑</button>` : ""}
-          </div>
-        `;
+      // ===== 投稿ヘッダー =====
+      const header = document.createElement("div");
+      header.className = "post-header";
+
+      const icon = document.createElement("img");
+      icon.className = "post-icon";
+      icon.src = post.user.icon || "/static/img/default.png";
+      icon.alt = "icon";
+
+      const name = document.createElement("span");
+      name.className = "post-name";
+      name.textContent = post.user.nickname || "名無し";
+
+      const time = document.createElement("span");
+      time.className = "time";
+      time.textContent = post.time;
+
+      header.append(icon, name, time);
+
+      // ===== 本文 =====
+      const text = document.createElement("div");
+      text.className = "post-text";
+      text.textContent = post.text;
+
+      // ===== アクション =====
+      const actions = document.createElement("div");
+      actions.className = "post-actions";
+      actions.innerHTML = `
+  <button class="like-btn">❤️ ${post.likes || 0}</button>
+  ${post.is_mine ? `<button class="edit-btn">✏</button><button class="delete-btn">🗑</button>` : ""}
+`;
+
+      // ===== 組み立て =====
+      div.append(header, text, actions);
+
 
       if (post.is_mine) {
         div.querySelector(".edit-btn").onclick = async () => {
@@ -389,11 +413,19 @@ document.addEventListener("DOMContentLoaded", () => {
           const ok = await confirmAsync();
           if (!ok) return;
 
-          // 見た目を即消す（optimistic UI）
-          div.remove();
+          try {
+            await deletePost(post.id);
 
-          // 実際の削除
-          deletePost(post.id);
+            // ✅ posts配列から削除
+            posts[currentType] = posts[currentType].filter(p => p.id !== post.id);
+
+            // ✅ 再描画
+            renderPosts();
+
+          } catch (e) {
+            alert("削除に失敗しました");
+            console.error(e);
+          }
         };
       }
 
