@@ -1,319 +1,349 @@
 /* ===============================
   ベース設定
 =============================== */
-html, body {
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  body {
-    margin: 0;
-    background: #f7f9fb;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  }
-  
-  /* ===============================
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  background: #f7f9fb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ===============================
     ヘッダー
   =============================== */
-  .header {
-    padding: 14px 24px;
-    background: #fff;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  /* ===============================
+.header {
+  padding: 14px 24px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+/* ===============================
     レイアウト
   =============================== */
-  .board-container {
-    max-width: 1200px;
-    margin: 30px auto;
-    display: flex;
-    gap: 30px;
-    height: calc(100vh - 70px);
-  }
-  
-  .board-main {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 10px;
-  }
-  
-  /* ===============================
+.board-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  display: flex;
+  gap: 30px;
+  height: calc(100vh - 70px);
+}
+
+.board-main {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* ===============================
     サイドパネル
   =============================== */
-  .side-panel {
-    width: 240px;
-    position: sticky;
-    top: 20px;
-    height: 100%;
-    overflow-y: auto;
-    background: #f3f6fb;
-    border-radius: 16px;
-    padding: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  
-  .side-panel::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .type-group {
-    font-size: 0.75rem;
-    color: #666;
-    margin: 14px 0 6px;
-  }
-  
-  .type-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 10px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    transition: 0.15s;
-  }
-  
-  .type-btn img {
-    width: 36px;
-  }
-  
-  .type-btn:hover {
-    background: #f5f8ff;
-  }
-  
-  .type-btn.active {
-    border: 2px solid #3a86ff;
-    background: #eef4ff;
-  }
-  
-  /* ===============================
+.side-panel {
+  width: 240px;
+  position: sticky;
+  top: 20px;
+  height: 100%;
+  overflow-y: auto;
+  background: #f3f6fb;
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.side-panel::-webkit-scrollbar {
+  display: none;
+}
+
+.type-group {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 14px 0 6px;
+}
+
+.type-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.type-btn img {
+  width: 36px;
+}
+
+.type-btn:hover {
+  background: #f5f8ff;
+}
+
+.type-btn.active {
+  border: 2px solid #3a86ff;
+  background: #eef4ff;
+}
+
+/* ===============================
     マイタイプカード
   =============================== */
-  .my-type-card {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #e8f0ff;
-    border: 2px solid #3a86ff;
-    border-radius: 14px;
-    padding: 12px;
-    margin-bottom: 20px;
-  }
-  
-  .my-type-card img {
-    width: 56px;
-  }
-  
-  .badge {
-    background: #3a86ff;
-    color: #fff;
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    border-radius: 10px;
-  }
-  
-  /* ===============================
+.my-type-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #e8f0ff;
+  border: 2px solid #3a86ff;
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.my-type-card img {
+  width: 56px;
+}
+
+.badge {
+  background: #3a86ff;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* ===============================
     投稿カード
   =============================== */
-  .board-header,
-  .post {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .my-post {
-    border: 2px solid #ff9f1c;
-  }
-  
-  .post-meta {
-    font-size: 0.75rem;
-    color: #777;
-  }
-  
-  .post-text {
-    margin: 6px 0 8px;
-    line-height: 1.4;
-  }
-  
-  /* ===============================
+.board-header,
+.post {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.my-post {
+  border: 2px solid #ddd;
+  border-left: 10px solid #a4a4a4;
+  border-right: 10px solid #a4a4a4;
+}
+
+.post-meta {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+.post-text {
+  margin: 6px 0 8px;
+  line-height: 1.4;
+}
+
+/* ===============================
     投稿アクション
   =============================== */
-  .post-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 8px;
-    margin-top: 6px;
-  }
-  
-  .post-actions button {
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: 14px;
-    padding: 4px 6px;
-    border-radius: 12px;
-    transition: 0.15s;
-  }
-  
-  /* ❤️ いいね */
-  .like-btn {
-    color: #657786;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  
-  .like-btn.liked {
-    color: #e0245e;
-  }
-  
-  .like-btn:hover {
-    background: #ffeef2;
-    color: #e0245e;
-    transform: scale(1.1);
-  }
-  
-  .edit-btn,
-  .delete-btn {
-    color: #657786;
-  }
-  
-  .edit-btn:hover {
-    color: #3a86ff;
-  }
-  
-  .delete-btn:hover {
-    color: red;
-  }
-  
-  /* ===============================
+.post-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.post-actions button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 6px;
+  border-radius: 12px;
+  transition: 0.15s;
+}
+
+/* ❤️ いいね */
+.like-btn {
+  color: #657786;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.like-btn.liked {
+  color: #e0245e;
+}
+
+.like-btn:hover {
+  background: #ffeef2;
+  color: #e0245e;
+  transform: scale(1.1);
+}
+
+.edit-btn,
+.delete-btn {
+  color: #657786;
+}
+
+.edit-btn:hover {
+  color: #3a86ff;
+}
+
+.delete-btn:hover {
+  color: red;
+}
+
+/* ===============================
     モーダル
   =============================== */
-  .modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .modal-box {
-    background: #fff;
-    width: 90%;
-    max-width: 420px;
-    padding: 20px;
-    border-radius: 12px;
-  }
-  
-  .modal-box input,
-  .modal-box textarea {
-    width: 100%;
-    margin-top: 12px;
-    padding: 10px;
-  }
-  
-  .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 12px;
-  }
-  
-  /* ===============================
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #fff;
+  width: 90%;
+  max-width: 420px;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.modal-box input,
+.modal-box textarea {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* ===============================
     補助クラス
   =============================== */
-  .readonly {
-    background: #eee;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
-  
-  /* 🚨 !importantは絶対に使わない */
-  .hidden {
-    display: none;
-  }
-  
-  /* ===============================
+.readonly {
+  background: #eee;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* 🚨 !importantは絶対に使わない */
+.hidden {
+  display: none;
+}
+
+/* ===============================
     ＋投稿ボタン（FAB）
   =============================== */
-  #fab {
-    position: fixed;
-    right: 24px;
-    bottom: 24px;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    border: none;
-    background: #ff5a5f;
-    color: #fff;
-    font-size: 36px;
-    cursor: pointer;
-  
-    /* ← これが重要 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  
-    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
-    transition: 0.15s;
-    z-index: 900;
-  }
-  
-  #fab:hover {
-    transform: scale(1.1);
-  }
-  
-  /* ===============================
+#fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: #ff5a5f;
+  color: #fff;
+  font-size: 36px;
+  cursor: pointer;
+
+  /* ← これが重要 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  transition: 0.15s;
+  z-index: 900;
+}
+
+#fab:hover {
+  transform: scale(1.1);
+}
+
+/* ===============================
     ユーザー表示
   =============================== */
-  .user-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    vertical-align: middle;
-    margin-right: 8px;
-  }
-  
-  .nickname {
-    font-weight: bold;
-    margin-right: 6px;
-  }
-  
-  #fab {
-    display: block !important;
-  }
-  
-  .confirm-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .confirm-box {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-  }
-  
+.user-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.nickname {
+  font-weight: bold;
+  margin-right: 6px;
+}
+
+#fab {
+  display: block !important;
+}
+
+.confirm-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.board-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  /* タイトルとタイプの間の空白 */
+}
+
+.my-type-indicator {
+  font-size: 14px;
+  color: #666;
+}
+
+.my-type-indicator strong {
+  background-color: #9c64d3; /* 紫系 */
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  font-size: 16px;          /* 太字はそのまま */
+}
+
+/* optional: マウスオーバーで少しハイライト */
+.my-type-indicator strong:hover {
+  background-color: #ddd;
+  cursor: default;
+}

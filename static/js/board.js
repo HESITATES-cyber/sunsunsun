@@ -37,6 +37,15 @@ document.addEventListener("DOMContentLoaded", () => {
   window.currentType = null;
 
   // =========================
+  // 自分のタイプ表示（掲示板タイトル右）
+  // =========================
+  const myTypeCode = document.getElementById("my-type-code");
+  if (myTypeCode && myType) {
+    myTypeCode.textContent = myType.toUpperCase();
+  }
+
+
+  // =========================
   // データ
   // =========================
   //const posts = {};
