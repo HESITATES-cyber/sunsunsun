@@ -12,38 +12,7 @@
 
 <body>
 
-<header class="header">
-  <a href="{% url 'board:index' %}">
-    <img src="{% static 'img/logo.png' %}" alt="食事タイプ診断">
-  </a>
-  
-  <div class="header-center">
-
-    <nav class="nav-item d-inline me-3">
-      <a href="{% url 'board:board' %}" class="nav-link">掲示板</a>
-    </nav>
-  
-    <nav class="nav-item d-inline me-3">
-      <a href="{% url 'board:characters' %}" class="nav-link">キャラクター一覧</a>
-    </nav>
-  
-    {% if user.is_authenticated %}
-      <!-- ログイン中 -->
-      <nav class="nav-item d-inline">
-        <form method="post" action="{% url 'logout' %}" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit" class="nav-link btn-link">ログアウト</button>
-        </form>
-      </nav>
-    {% else %}
-      <!-- 未ログイン -->
-      <nav class="nav-item d-inline">
-        <a href="{% url 'login' %}" class="nav-link">ログイン</a>
-      </nav>
-    {% endif %}
-  
-  </div>
-</header>
+  {% include "components/header.html" %}
 
 <main class="container-fluid my-5">
   <h1 class="text-center mb-5">キャラクター一覧</h1>

@@ -1,349 +1,295 @@
 /* ===============================
-  ベース設定
+   変数（プロダクトUI基盤）
 =============================== */
-html,
-body {
-  height: 100%;
-  overflow: hidden;
+:root {
+  --bg: #f7f9fb;
+  --card: #ffffff;
+  --main: #14b8a6;
+  --text: #111827;
+  --muted: #6b7280;
+  --radius: 18px;
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-md: 0 12px 30px rgba(0,0,0,0.08);
 }
 
-body {
+/* ===============================
+   全体固定
+=============================== */
+html, body {
+  height: 100%;
   margin: 0;
-  background: #f7f9fb;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--text);
 }
 
 /* ===============================
-    ヘッダー
-  =============================== */
+   ヘッダー
+=============================== */
 .header {
-  padding: 14px 24px;
-  background: #fff;
-  border-bottom: 1px solid #ddd;
-}
-
-/* ===============================
-    レイアウト
-  =============================== */
-.board-container {
-  max-width: 1200px;
-  margin: 30px auto;
+  height: 72px;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #eee;
   display: flex;
-  gap: 30px;
-  height: calc(100vh - 70px);
-}
-
-.board-main {
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 10px;
+  align-items: center;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 2000;
 }
 
 /* ===============================
-    サイドパネル
-  =============================== */
+   メインレイアウト
+=============================== */
+.board-container {
+  height: calc(100vh - 72px);
+  display: flex;
+  gap: 28px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 20px 20px 20px; /* ← 空気感 */
+  box-sizing: border-box;
+}
+
+/* 上部の空気感グラデーション */
+.board-container::before {
+  content: "";
+  position: fixed;
+  top: 72px;
+  left: 0;
+  width: 100%;
+  height: 140px;
+  background: linear-gradient(to bottom, #f7f9fb, rgba(247,249,251,0));
+  z-index: -1;
+}
+
+/* ===============================
+   左：タイプ一覧
+=============================== */
 .side-panel {
-  width: 240px;
-  position: sticky;
-  top: 20px;
+  width: 260px;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-md);
   height: 100%;
   overflow-y: auto;
-  background: #f3f6fb;
-  border-radius: 16px;
-  padding: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
-.side-panel::-webkit-scrollbar {
-  display: none;
-}
+/* スクロールバー非表示 */
+.side-panel::-webkit-scrollbar { display: none; }
 
 .type-group {
-  font-size: 0.75rem;
-  color: #666;
-  margin: 14px 0 6px;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 18px 0 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
+/* タイプボタン */
 .type-btn {
   width: 100%;
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 10px;
-  margin-bottom: 8px;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 10px;
   cursor: pointer;
-  transition: 0.15s;
+  transition: 0.2s;
 }
 
-.type-btn img {
-  width: 36px;
-}
+.type-btn img { width: 36px; }
 
 .type-btn:hover {
-  background: #f5f8ff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  background: #f9fafb;
 }
 
 .type-btn.active {
-  border: 2px solid #3a86ff;
-  background: #eef4ff;
+  background: linear-gradient(135deg, #e6fffa, #ccfbf1);
+  border: 2px solid var(--main);
+  font-weight: 700;
 }
 
 /* ===============================
-    マイタイプカード
-  =============================== */
-.my-type-card {
+   右：掲示板
+=============================== */
+.board-main {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 10px;
+  transition: opacity 0.2s;
+}
+
+/* スクロールバー細く */
+.board-main::-webkit-scrollbar { width: 6px; }
+.board-main::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+/* ===============================
+   掲示板タイトルカード
+=============================== */
+.board-header {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 22px;
+}
+
+/* タイトル行 */
+.board-title-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: #e8f0ff;
-  border: 2px solid #3a86ff;
-  border-radius: 14px;
-  padding: 12px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 6px;
 }
 
-.my-type-card img {
-  width: 56px;
+.board-title-row h2 {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.3;
 }
 
-.badge {
-  background: #3a86ff;
-  color: #fff;
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 10px;
+/* あなたのタイプバッジ */
+.my-type-indicator {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.my-type-indicator strong {
+  background: var(--main);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 /* ===============================
-    投稿カード
-  =============================== */
-.board-header,
+   投稿カード
+=============================== */
 .post {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  background: var(--card);
+  border-radius: 18px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: 0.15s;
 }
 
+.post:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* 自分の投稿ライン */
 .my-post {
-  border: 2px solid #ddd;
-  border-left: 10px solid #a4a4a4;
-  border-right: 10px solid #a4a4a4;
+  border-left: 6px solid var(--main);
 }
 
+/* メタ情報 */
 .post-meta {
-  font-size: 0.75rem;
-  color: #777;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
 }
 
 .post-text {
-  margin: 6px 0 8px;
-  line-height: 1.4;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 8px;
 }
 
 /* ===============================
-    投稿アクション
-  =============================== */
+   投稿アクション
+=============================== */
 .post-actions {
   display: flex;
   justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-  margin-top: 6px;
+  gap: 10px;
 }
 
 .post-actions button {
   border: none;
   background: transparent;
   cursor: pointer;
-  font-size: 14px;
-  padding: 4px 6px;
-  border-radius: 12px;
+  padding: 6px;
+  border-radius: 999px;
   transition: 0.15s;
-}
-
-/* ❤️ いいね */
-.like-btn {
-  color: #657786;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.like-btn.liked {
-  color: #e0245e;
 }
 
 .like-btn:hover {
-  background: #ffeef2;
+  background: #ffe4e6;
   color: #e0245e;
-  transform: scale(1.1);
-}
-
-.edit-btn,
-.delete-btn {
-  color: #657786;
-}
-
-.edit-btn:hover {
-  color: #3a86ff;
-}
-
-.delete-btn:hover {
-  color: red;
 }
 
 /* ===============================
-    モーダル
-  =============================== */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-box {
-  background: #fff;
-  width: 90%;
-  max-width: 420px;
-  padding: 20px;
-  border-radius: 12px;
-}
-
-.modal-box input,
-.modal-box textarea {
-  width: 100%;
-  margin-top: 12px;
-  padding: 10px;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-/* ===============================
-    補助クラス
-  =============================== */
-.readonly {
-  background: #eee;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-/* 🚨 !importantは絶対に使わない */
-.hidden {
-  display: none;
-}
-
-/* ===============================
-    ＋投稿ボタン（FAB）
-  =============================== */
+   FAB 投稿ボタン
+=============================== */
 #fab {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 64px;
-  height: 64px;
+  right: 28px;
+  bottom: 28px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   border: none;
-  background: #ff5a5f;
-  color: #fff;
+  background: linear-gradient(135deg, #14b8a6, #22c55e);
+  color: white;
   font-size: 36px;
   cursor: pointer;
-
-  /* ← これが重要 */
   display: flex;
   align-items: center;
   justify-content: center;
-
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
-  transition: 0.15s;
-  z-index: 900;
+  box-shadow: 0 14px 40px rgba(20,184,166,0.45);
+  z-index: 5000;
+  transition: 0.2s;
 }
 
 #fab:hover {
-  transform: scale(1.1);
+  transform: scale(1.15) rotate(8deg);
 }
 
 /* ===============================
-    ユーザー表示
-  =============================== */
-.user-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  vertical-align: middle;
-  margin-right: 8px;
-}
-
-.nickname {
-  font-weight: bold;
-  margin-right: 6px;
-}
-
-#fab {
-  display: block !important;
-}
-
-.confirm-modal {
+   モーダル
+=============================== */
+.modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0,0,0,0.45);
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: center;
+  z-index: 6000;
 }
 
-.confirm-box {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
+.modal-box {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  width: 420px;
+  box-shadow: var(--shadow-md);
 }
 
-.board-title-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  /* タイトルとタイプの間の空白 */
-}
-
-.my-type-indicator {
-  font-size: 14px;
-  color: #666;
-}
-
-.my-type-indicator strong {
-  background-color: #9c64d3; /* 紫系 */
-  color: white;
-  padding: 4px 10px;
+/* ===============================
+   その他
+=============================== */
+.readonly {
+  background: #f3f4f6;
+  padding: 10px;
   border-radius: 12px;
-  font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  font-size: 16px;          /* 太字はそのまま */
+  margin-bottom: 12px;
 }
 
-/* optional: マウスオーバーで少しハイライト */
-.my-type-indicator strong:hover {
-  background-color: #ddd;
-  cursor: default;
-}
+.hidden { display: none; }

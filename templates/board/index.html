@@ -49,36 +49,7 @@
 <body>
 
 <!-- ページヘッダー（既存） -->
-<header class="header d-flex justify-content-between align-items-center p-2">
-  <a href="{% url 'board:index' %}" id="logo-link">
-    <img src="{% static 'img/logo.png' %}" alt="食事タイプ診断" height="50">
-  </a>
-
-  <div class="header-center">
-
-    <nav class="nav-item d-inline me-3">
-      <a href="{% url 'board:board' %}" class="nav-link">掲示板</a>
-    </nav>
-  
-    <nav class="nav-item d-inline me-3">
-      <a href="{% url 'board:characters' %}" class="nav-link">キャラクター一覧</a>
-    </nav>
-  
-    {% if user.is_authenticated %}
-      <nav class="nav-item d-inline">
-        <form method="post" action="{% url 'logout' %}" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit" class="nav-link btn-link">ログアウト</button>
-        </form>
-      </nav>
-    {% else %}
-      <nav class="nav-item d-inline">
-        <a href="{% url 'login' %}" class="nav-link">ログイン</a>
-      </nav>
-    {% endif %}
-  
-  </div>
-</header>
+{% include "components/header.html" %}
 
 <!-- 上ヘッダー：質問番号＋進行バー -->
 <div class="diagnosis-header" style="display:none;" id="diagnosis-header">
