@@ -123,3 +123,5 @@ MEDIA_ROOT = BASE_DIR / "media"
 # ログイン後に掲示板トップなどにリダイレクト
 LOGIN_REDIRECT_URL = "/board/"
 LOGOUT_REDIRECT_URL = "/"
+
+# test
