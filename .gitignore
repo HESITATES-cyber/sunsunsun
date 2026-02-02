@@ -57,3 +57,4 @@ docker-*.sh
 
 # OS
 Thumbs.db
+db.sqlite3
