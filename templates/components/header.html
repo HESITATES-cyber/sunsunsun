@@ -1,22 +1,27 @@
 {% load static %}
 
-<header class="header d-flex justify-content-between align-items-center p-2">
+<header class="header d-flex align-items-center p-2">
   <a href="{% url 'board:index' %}">
     <img src="{% static 'img/logo.png' %}" alt="ロゴ" height="40">
   </a>
 
-  <nav>
+  <nav class="d-flex align-items-center ms-auto">
     <a href="{% url 'board:board' %}" class="me-3">掲示板</a>
     <a href="{% url 'board:characters' %}" class="me-3">キャラ一覧</a>
 
     {% if user.is_authenticated %}
-      <a href="{% url 'accounts:profile' %}" class="me-3">プロフィール</a>
-      <form method="post" action="{% url 'logout' %}" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-link p-0">ログアウト</button>
-      </form>
+    <a href="{% url 'accounts:profile' %}" class="me-3">プロフィール</a>
+    <form method="post" action="{% url 'logout' %}" class="me-3">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-link p-0">ログアウト</button>
+    </form>
     {% else %}
-      <a href="{% url 'login' %}">ログイン</a>
+    <a href="{% url 'login' %}" class="me-3">ログイン</a>
     {% endif %}
+
+    <!-- ダークモード切替 -->
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+    <script src="{% static 'js/theme.js' %}"></script>
+
   </nav>
 </header>

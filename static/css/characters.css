@@ -1,150 +1,156 @@
 /* ===============================
-   背景
+   CHARACTER THEME VARIABLES
+=============================== */
+:root {
+  --bg-page: #f7fbfa;
+  --card-bg: #ffffff;
+  --text-main: #222;
+  --text-sub: #555;
+
+  --shadow-normal: 0 14px 34px rgba(0,0,0,0.12);
+  --shadow-hover: 0 22px 48px rgba(0,0,0,0.18);
+
+  /* タイプ別カラー */
+  --cw-bg: #fff0f0;
+  --cw-text: #942f2f;
+
+  --cx-bg: #f3f6ff;
+  --cx-text: #2d4da6;
+
+  --sw-bg: #f7f7f7;
+  --sw-text: #3f3f3f;
+
+  --sx-bg: #faf4ff;
+  --sx-text: #59287a;
+}
+
+body.dark {
+  --bg-page: #0f172a;
+  --card-bg: #111827;
+  --text-main: #e5e7eb;
+  --text-sub: #94a3b8;
+}
+
+/* ===============================
+   PAGE
 =============================== */
 body {
-    background: #f7fbfa;
-  }
-  
-  /* ===============================
-     行セクション
-  =============================== */
-  .type-row {
-    margin-bottom: 4rem;
-  }
-  
-  /* ===============================
-     キャラクターカード
-  =============================== */
+  background: var(--bg-page);
+}
+
+/* ===============================
+   LAYOUT
+=============================== */
+#character-list {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.type-row {
+  margin-bottom: 4rem;
+}
+
+/* ===============================
+   CARD BASE
+=============================== */
+.character-card {
+  height: 100%;
+  padding: 36px 24px;
+  border-radius: 24px;
+  background: var(--card-bg);
+  text-align: center;
+
+  box-shadow: var(--shadow-normal);
+  transition: transform .25s ease, box-shadow .25s ease;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.character-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ===============================
+   TYPE CODE
+=============================== */
+.type-code {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: .12em;
+  margin-bottom: 14px;
+  opacity: .85;
+}
+
+/* ===============================
+   IMAGE
+=============================== */
+.character-card img {
+  width: auto;
+  max-width: 400px;
+  height: auto;
+  margin-bottom: 20px;
+  display: block;
+}
+
+/* ===============================
+   NAME & TEXT
+=============================== */
+.character-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: .6rem;
+  color: var(--text-main);
+}
+
+.character-card p {
+  font-size: .95rem;
+  line-height: 1.7;
+  color: var(--text-sub);
+}
+
+/* ===============================
+   TYPE VARIATIONS
+=============================== */
+.character-card.type-cw {
+  background: var(--cw-bg);
+}
+.character-card.type-cw .type-code {
+  color: var(--cw-text);
+}
+
+.character-card.type-cx {
+  background: var(--cx-bg);
+}
+.character-card.type-cx .type-code {
+  color: var(--cx-text);
+}
+
+.character-card.type-sw {
+  background: var(--sw-bg);
+}
+.character-card.type-sw .type-code {
+  color: var(--sw-text);
+}
+
+.character-card.type-sx {
+  background: var(--sx-bg);
+}
+.character-card.type-sx .type-code {
+  color: var(--sx-text);
+}
+
+/* ===============================
+   MOBILE
+=============================== */
+@media (max-width: 576px) {
   .character-card {
-    height: 100%;
-    padding: 36px 24px;        /* ← 縦方向をしっかり大きく */
-    border-radius: 24px;
-    background: #ffffff;
-    text-align: center;
-  
-    box-shadow: 0 14px 34px rgba(0,0,0,0.12);
-    transition: transform .25s ease, box-shadow .25s ease;
-  
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 28px 18px;
   }
-  
-  /* hover */
-  .character-card:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 22px 48px rgba(0,0,0,0.18);
-  }
-  
-  /* ===============================
-     タイプコード
-  =============================== */
-  .type-code {
-    font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: .12em;
-    margin-bottom: 14px;
-    opacity: .7;
-  }
-  
-  /* ===============================
-     画像
-  =============================== */
+
   .character-card img {
-    width: auto;
-    max-width: 400px;   
-    height: auto;
-    margin-bottom: 20px;
-    display: block;
-  
+    max-width: 180px;
   }
-  
-  /* ===============================
-     名前
-  =============================== */
-  .character-card h3 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: .6rem;
-  }
-  
-  /* ===============================
-     説明文
-  =============================== */
-  .character-card p {
-    font-size: .95rem;
-    line-height: 1.7;
-    color: #555;
-  }
-  
-  /* ===============================
-     タイプ別背景
-  =============================== */
-  .type-cw .character-card {
-    background: #fdeaea;
-  }
-  
-  .type-cx .character-card {
-    background: #eaf0fb;
-  }
-  
-  .type-sw .character-card {
-    background: #f3f3f3;
-  }
-  
-  .type-sx .character-card {
-    background: #f4e9f7;
-  }
-  
-  /* ===============================
-     スマホ微調整
-  =============================== */
-  @media (max-width: 576px) {
-    .character-card {
-      padding: 28px 18px;
-    }
-  
-    .character-card img {
-      max-width: 180px;
-    }
-  }
-  
-  #character-list {
-    max-width: 1600px;   /* ← ここを追加 */
-    margin: 0 auto;
-  }
-  
-  /* ===============================
-     カード内 背景色（タイプ別）
-  =============================== */
-  
-  .character-card.type-cw { background: #fff0f0; }
-  .character-card.type-cx { background: #f3f6ff; }
-  .character-card.type-sw { background: #f7f7f7; }
-  .character-card.type-sx { background: #faf4ff; }
-  
-  /* ===============================
-     タイプコード文字色（背景より濃く）
-  =============================== */
-  
-  /* 赤系 */
-  .character-card.type-cw .type-code {
-    color: #942f2f;
-  }
-  
-  /* 青系 */
-  .character-card.type-cx .type-code {
-    color: #2d4da6;
-  }
-  
-  /* グレー系 */
-  .character-card.type-sw .type-code {
-    color: #3f3f3f;
-  }
-  
-  /* 紫系 */
-  .character-card.type-sx .type-code {
-    color: #59287a;
-  }
-  
-  
+}

@@ -1,26 +1,48 @@
 /* ===============================
-   変数（プロダクトUI基盤）
+   デザイン変数（最終完成）
 =============================== */
 :root {
-  --bg: #f7f9fb;
+  --bg: #f8fafc;
   --card: #ffffff;
-  --main: #14b8a6;
-  --text: #111827;
-  --muted: #6b7280;
+  --card-soft: #f9fafb;
+
+  --main: #2dd4bf;
+  --main-soft: #e6fffa;
+
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e5e7eb;
+
   --radius: 18px;
+
   --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
-  --shadow-md: 0 12px 30px rgba(0,0,0,0.08);
+  --shadow-md: 0 12px 28px rgba(0,0,0,0.08);
 }
 
 /* ===============================
-   全体固定
+   ダークモード変数
+=============================== */
+body.dark {
+  --bg: #0f172a;
+  --card: #111827;
+  --card-soft: #0b1220;
+
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --border: #1f2933;
+
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-md: 0 16px 32px rgba(0,0,0,0.6);
+}
+
+/* ===============================
+   全体
 =============================== */
 html, body {
   height: 100%;
   margin: 0;
-  overflow: hidden;
   background: var(--bg);
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   color: var(--text);
 }
 
@@ -29,9 +51,9 @@ html, body {
 =============================== */
 .header {
   height: 72px;
-  background: rgba(255,255,255,0.9);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #eee;
+  background: color-mix(in srgb, var(--card) 85%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   padding: 0 28px;
@@ -41,32 +63,20 @@ html, body {
 }
 
 /* ===============================
-   メインレイアウト
+   レイアウト
 =============================== */
 .board-container {
   height: calc(100vh - 72px);
-  display: flex;
-  gap: 28px;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 32px 20px 20px 20px; /* ← 空気感 */
+  padding: 28px 20px;
+  display: flex;
+  gap: 28px;
   box-sizing: border-box;
 }
 
-/* 上部の空気感グラデーション */
-.board-container::before {
-  content: "";
-  position: fixed;
-  top: 72px;
-  left: 0;
-  width: 100%;
-  height: 140px;
-  background: linear-gradient(to bottom, #f7f9fb, rgba(247,249,251,0));
-  z-index: -1;
-}
-
 /* ===============================
-   左：タイプ一覧
+   サイド（タイプ一覧）
 =============================== */
 .side-panel {
   width: 260px;
@@ -74,19 +84,17 @@ html, body {
   border-radius: var(--radius);
   padding: 16px;
   box-shadow: var(--shadow-md);
-  height: 100%;
   overflow-y: auto;
 }
 
-/* スクロールバー非表示 */
 .side-panel::-webkit-scrollbar { display: none; }
 
 .type-group {
   font-size: 12px;
-  color: var(--muted);
-  margin: 18px 0 8px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 20px 0 10px;
+  letter-spacing: 0.05em;
 }
 
 /* タイプボタン */
@@ -94,74 +102,75 @@ html, body {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: white;
-  border: 1px solid #eee;
+  gap: 12px;
+  background: var(--card-soft);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 12px;
   margin-bottom: 10px;
   cursor: pointer;
   transition: 0.2s;
+  color: var(--text);
 }
 
-.type-btn img { width: 36px; }
+.type-btn img { width: 34px; }
 
 .type-btn:hover {
+  background: var(--main-soft);
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
-  background: #f9fafb;
 }
 
+/* アクティブ */
 .type-btn.active {
-  background: linear-gradient(135deg, #e6fffa, #ccfbf1);
-  border: 2px solid var(--main);
+  background: var(--card);
+  border-left: 4px solid var(--main);
+  box-shadow: var(--shadow-md);
+  transform: translateX(2px);
   font-weight: 700;
 }
 
 /* ===============================
-   右：掲示板
+   メイン掲示板
 =============================== */
 .board-main {
   flex: 1;
-  height: 100%;
   overflow-y: auto;
-  padding-right: 10px;
-  transition: opacity 0.2s;
+  padding-right: 6px;
 }
 
-/* スクロールバー細く */
 .board-main::-webkit-scrollbar { width: 6px; }
 .board-main::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+  background: var(--border);
   border-radius: 4px;
 }
 
 /* ===============================
-   掲示板タイトルカード
+   掲示板ヘッダー
 =============================== */
 .board-header {
-  background: var(--card);
-  border-radius: 20px;
-  padding: 20px 22px;
+  background: linear-gradient(
+    to bottom,
+    var(--card),
+    var(--card-soft)
+  );
+  border-radius: 22px;
+  padding: 22px 24px;
   box-shadow: var(--shadow-md);
   margin-bottom: 22px;
 }
 
-/* タイトル行 */
 .board-title-row {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-bottom: 6px;
 }
 
 .board-title-row h2 {
   font-size: 26px;
   font-weight: 800;
-  line-height: 1.3;
 }
 
-/* あなたのタイプバッジ */
 .my-type-indicator {
   font-size: 14px;
   color: var(--muted);
@@ -169,10 +178,9 @@ html, body {
 
 .my-type-indicator strong {
   background: var(--main);
-  color: white;
-  padding: 4px 12px;
+  color: #ffffff;
+  padding: 4px 14px;
   border-radius: 999px;
-  font-size: 14px;
   font-weight: 700;
 }
 
@@ -181,10 +189,10 @@ html, body {
 =============================== */
 .post {
   background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 18px;
   padding: 16px 18px;
   margin-bottom: 14px;
-  box-shadow: var(--shadow-sm);
   transition: 0.15s;
 }
 
@@ -193,22 +201,21 @@ html, body {
   box-shadow: var(--shadow-md);
 }
 
-/* 自分の投稿ライン */
+/* 自分の投稿 */
 .my-post {
-  border-left: 6px solid var(--main);
+  border-left: 4px solid var(--main);
 }
 
-/* メタ情報 */
+/* 投稿メタ */
 .post-meta {
   font-size: 12px;
   color: var(--muted);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .post-text {
   font-size: 15px;
-  line-height: 1.6;
-  margin-bottom: 8px;
+  line-height: 1.65;
 }
 
 /* ===============================
@@ -217,7 +224,7 @@ html, body {
 .post-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 12px;
 }
 
 .post-actions button {
@@ -227,38 +234,39 @@ html, body {
   padding: 6px;
   border-radius: 999px;
   transition: 0.15s;
+  color: var(--muted);
 }
 
-.like-btn:hover {
-  background: #ffe4e6;
-  color: #e0245e;
+.post-actions button:hover {
+  background: var(--main-soft);
+  color: var(--main);
 }
 
 /* ===============================
-   FAB 投稿ボタン
+   FAB
 =============================== */
 #fab {
   position: fixed;
-  right: 28px;
-  bottom: 28px;
-  width: 68px;
-  height: 68px;
+  right: 24px;
+  bottom: 24px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   border: none;
-  background: linear-gradient(135deg, #14b8a6, #22c55e);
-  color: white;
-  font-size: 36px;
+  background: var(--main);
+  color: #ffffff;
+  font-size: 26px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 14px 40px rgba(20,184,166,0.45);
-  z-index: 5000;
+  box-shadow: 0 14px 32px rgba(45,212,191,0.45);
   transition: 0.2s;
+  z-index: 5000;
 }
 
 #fab:hover {
-  transform: scale(1.15) rotate(8deg);
+  transform: scale(1.1);
 }
 
 /* ===============================
@@ -267,7 +275,7 @@ html, body {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(15,23,42,0.55);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -275,7 +283,8 @@ html, body {
 }
 
 .modal-box {
-  background: white;
+  background: var(--card);
+  color: var(--text);
   border-radius: 20px;
   padding: 24px;
   width: 420px;
@@ -285,11 +294,4 @@ html, body {
 /* ===============================
    その他
 =============================== */
-.readonly {
-  background: #f3f4f6;
-  padding: 10px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
-
 .hidden { display: none; }

@@ -75,8 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
     switchType(myType);
   } else {
     // 未診断時の初期表示（何もしない or デフォルト）
-    document.getElementById("board-title").textContent =
-      "タイプを選択してください";
+    switchType("cfex");
+    //document.getElementById("board-title").textContent =
+      //"タイプを選択してください";
   }
 
 
@@ -358,7 +359,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const name = document.createElement("span");
       name.className = "post-name";
-      name.textContent = post.user.nickname || "名無し";
+      name.textContent = post.user.first_name || post.user.username || "名無し";
+
 
       const time = document.createElement("span");
       time.className = "time";

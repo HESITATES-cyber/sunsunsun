@@ -4,11 +4,22 @@ from django.contrib.auth.models import User
 
 class Post(models.Model):
     TYPE_CHOICES = [
-        ("cfex", "CFEX"),
-        ("cshe", "CSHE"),
-        ("mwfx", "MWFX"),
-        ("other", "Other"),
-    ]
+    # 赤
+    ("cfew", "CFEW"), ("cmhw", "CMHW"),
+    ("cmew", "CMEW"), ("cfhw", "CFHW"),
+
+    # 青
+    ("cfhx", "CFHX"), ("cmex", "CMEX"),
+    ("cfex", "CFEX"), ("cmhx", "CMHX"),
+
+    # 灰
+    ("sfew", "SFEW"), ("smew", "SMEW"),
+    ("sfhw", "SFHW"), ("smhw", "SMHW"),
+
+    # 紫
+    ("sfex", "SFEX"), ("smex", "SMEX"),
+    ("sfhx", "SFHX"), ("smhx", "SMHX"),
+]
 
     user = models.ForeignKey(
         User,
