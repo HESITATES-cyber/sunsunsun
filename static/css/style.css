@@ -1,6 +1,6 @@
-/* ===============================
-   THEME VARIABLES
-=============================== */
+/* ============================================================
+  0) THEME VARIABLES (Global)
+============================================================ */
 :root {
   --bg-main: #fefefe;
   --bg-card: #ffffff;
@@ -13,13 +13,11 @@
   --accent-soft: #eaf7ef;
 
   --border: #ddd;
-  --shadow-sm: 0 4px 14px rgba(0,0,0,0.08);
-  --shadow-md: 0 12px 30px rgba(0,0,0,0.12);
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
-/* ===============================
-   DARK MODE
-=============================== */
+/* Dark mode */
 body.dark {
   --bg-main: #0f172a;
   --bg-card: #111827;
@@ -29,20 +27,24 @@ body.dark {
   --text-sub: #94a3b8;
 
   --border: #1f2937;
-  --shadow-sm: 0 6px 20px rgba(0,0,0,0.5);
-  --shadow-md: 0 20px 40px rgba(0,0,0,0.6);
+  --shadow-sm: 0 6px 20px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* ===============================
-   BASE
-=============================== */
+/* ============================================================
+  1) BASE
+============================================================ */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding-bottom: 150px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background: var(--bg-main);
   color: var(--text-main);
-  transition: background 0.3s, color 0.3s;
+  transition: background .3s, color .3s;
 }
 
 a {
@@ -50,9 +52,30 @@ a {
   color: inherit;
 }
 
-/* ===============================
-   HEADER
-=============================== */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 16px;
+}
+
+/* Card (generic) */
+.card {
+  background: var(--bg-card);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 24px;
+}
+
+/* ============================================================
+  2) HEADER / HERO / TOP
+============================================================ */
 .header {
   position: sticky;
   top: 0;
@@ -70,7 +93,6 @@ a {
   height: 48px;
 }
 
-/* テーマ切替 */
 .theme-btn {
   border: none;
   background: transparent;
@@ -78,20 +100,17 @@ a {
   cursor: pointer;
   padding: 8px;
   border-radius: 999px;
-  transition: 0.2s;
+  transition: .2s;
 }
 
 .theme-btn:hover {
-  background: rgba(0,0,0,0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 body.dark .theme-btn:hover {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
 }
 
-/* ===============================
-   HERO
-=============================== */
 .hero {
   height: 400px;
   background: url("../img/back000.png") no-repeat center top;
@@ -104,37 +123,38 @@ body.dark .theme-btn:hover {
 .hero-inner {
   text-align: center;
   color: #fff;
+  padding: 0 16px;
 }
 
 .hero-title {
   font-size: 36px;
   font-weight: 800;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  margin: 0;
 }
 
-/* ===============================
-   CONTAINER
-=============================== */
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 40px 16px;
+.hero-sub {
+  margin: 10px 0 0;
+  font-size: 14px;
+  opacity: .95;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
-/* ===============================
-   CARD
-=============================== */
-.card {
-  background: var(--bg-card);
-  border-radius: 18px;
-  padding: 24px;
+.top-image {
+  display: flex;
+  justify-content: center;
+  padding: 18px 16px 0;
+}
+
+.top-image img {
+  width: min(820px, 100%);
+  border-radius: 16px;
   box-shadow: var(--shadow-md);
-  margin-bottom: 24px;
 }
 
-/* ===============================
-   PROGRESS
-=============================== */
+/* ============================================================
+  3) Progress bar (custom)
+============================================================ */
 .progress-container {
   height: 10px;
   background: #eee;
@@ -142,73 +162,689 @@ body.dark .theme-btn:hover {
   overflow: hidden;
 }
 
-.progress-bar {
+.progress-container .progress-bar {
   height: 100%;
   background: var(--accent);
-  transition: width 0.4s ease;
+  transition: width .4s ease;
 }
 
-/* ===============================
-   QUESTION
-=============================== */
-.question-card {
+#header-progress {
+  background: var(--accent);
+}
+
+/* ============================================================
+  4) Diagnosis Page - QUESTION UI (絶対に崩さない)
+============================================================ */
+body.diagnosis-page .questions-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+body.diagnosis-page .question-card {
   opacity: 0.3;
-  transform: scale(0.97);
-  transition: 0.3s;
+  transform: scale(0.98);
+  transition: opacity .3s ease, transform .3s ease;
+  padding: 30px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background: var(--bg-card);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
-.question-card.active {
+body.diagnosis-page .question-card.active {
   opacity: 1;
-  transform: scale(1);
+  transform: scale(1.02);
 }
 
-/* ===============================
-   RESULT
-=============================== */
-.result-code {
-  font-size: 48px;
+body.diagnosis-page .scale-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  margin-top: 25px;
+  position: relative;
+  padding-bottom: 32px;
+}
+
+/* labels */
+body.diagnosis-page .scale-label-left,
+body.diagnosis-page .scale-label-right {
+  position: absolute;
+  bottom: -30px;
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+body.diagnosis-page .scale-label-left {
+  left: 0;
+}
+
+body.diagnosis-page .scale-label-right {
+  right: 0;
+}
+
+/* circles */
+body.diagnosis-page .scale-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 4px solid #ccc;
+  cursor: pointer;
+  transition: all .25s ease;
+  position: relative;
+  color: transparent;
+}
+
+body.diagnosis-page .scale-circle[data-pos="1"],
+body.diagnosis-page .scale-circle[data-pos="7"] {
+  width: 80px;
+  height: 80px;
+}
+
+body.diagnosis-page .scale-circle[data-pos="2"],
+body.diagnosis-page .scale-circle[data-pos="6"] {
+  width: 64px;
+  height: 64px;
+}
+
+body.diagnosis-page .scale-circle[data-pos="3"],
+body.diagnosis-page .scale-circle[data-pos="5"] {
+  width: 54px;
+  height: 54px;
+}
+
+body.diagnosis-page .scale-circle[data-pos="4"] {
+  width: 44px;
+  height: 44px;
+}
+
+body.diagnosis-page .scale-circle.left {
+  border-color: #8a4fbf;
+}
+
+body.diagnosis-page .scale-circle.middle {
+  border-color: #aaa;
+}
+
+body.diagnosis-page .scale-circle.right {
+  border-color: #2fa36b;
+}
+
+body.diagnosis-page input[type="radio"] {
+  display: none;
+}
+
+/* hover */
+body.diagnosis-page input[type="radio"]:hover+.scale-circle.left {
+  background: rgba(138, 79, 191, 0.25);
+}
+
+body.diagnosis-page input[type="radio"]:hover+.scale-circle.middle {
+  background: rgba(170, 170, 170, 0.20);
+}
+
+body.diagnosis-page input[type="radio"]:hover+.scale-circle.right {
+  background: rgba(47, 163, 107, 0.22);
+}
+
+body.diagnosis-page input[type="radio"]:hover+.scale-circle::after {
+  content: "✓";
+  font-size: 24px;
+  position: absolute;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.6;
+}
+
+/* checked */
+body.diagnosis-page input[type="radio"]:checked+.scale-circle.left {
+  background: #8a4fbf;
+  border-color: #8a4fbf;
+  color: #fff;
+}
+
+body.diagnosis-page input[type="radio"]:checked+.scale-circle.middle {
+  background: #aaa;
+  border-color: #aaa;
+  color: #fff;
+}
+
+body.diagnosis-page input[type="radio"]:checked+.scale-circle.right {
+  background: #2fa36b;
+  border-color: #2fa36b;
+  color: #fff;
+}
+
+body.diagnosis-page input[type="radio"]:checked+.scale-circle::after {
+  content: "✓";
+  font-size: 24px;
+  position: absolute;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+/* ============================================================
+  5) Diagnosis Page - RESULT Base layout (常時OK / 派手にしない)
+============================================================ */
+body.diagnosis-page #result-area {
+  max-width: 980px;
+  margin: 32px auto;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+body.diagnosis-page .result-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  padding: 28px;
+}
+
+body.diagnosis-page .result-title {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+body.diagnosis-page .result-code {
+  font-size: 40px;
   font-weight: 900;
+  letter-spacing: .08em;
+  margin: 0 0 18px;
   color: var(--accent);
   text-align: center;
 }
 
-/* ===============================
-   POST
-=============================== */
-.post {
-  background: var(--bg-card);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 16px;
+body.diagnosis-page .result-main-card {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 22px;
+  align-items: start;
+  background: var(--bg-sub);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  margin-top: 10px;
 }
 
-.post-header {
+body.diagnosis-page .main-card-image {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body.diagnosis-page .main-card-image img {
+  width: 100%;
+  max-width: 260px;
+  max-height: 340px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+body.diagnosis-page .result-main-card h3 {
+  margin: 6px 0 8px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+body.diagnosis-page .result-main-card p {
+  margin: 0 0 14px;
+  line-height: 1.8;
+  color: var(--text-sub);
+}
+
+body.diagnosis-page .group-label {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+body.diagnosis-page .personality-section {
+  margin-top: 22px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  padding: 22px;
+}
+
+body.diagnosis-page .section-title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 800;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.post-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+body.diagnosis-page .section-number {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-sub);
+  border: 1px solid var(--border);
+  font-size: 13px;
 }
 
-/* ===============================
-   FLOAT BUTTON
-=============================== */
-#fab {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: #ff5a5f;
+body.diagnosis-page .scene-stress-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+body.diagnosis-page .scene-card,
+body.diagnosis-page .stress-card {
+  background: var(--bg-sub);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+body.diagnosis-page .scene-card ul,
+body.diagnosis-page .stress-card ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: rgba(0, 0, 0, 0.70);
+}
+
+body.diagnosis-page .aruaru-section {
+  margin-top: 16px;
+  background: var(--bg-sub);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+body.diagnosis-page #result-area .d-grid {
+  max-width: 520px;
+  margin: 18px auto 0;
+}
+
+@media (max-width:820px) {
+  body.diagnosis-page .result-main-card {
+    grid-template-columns: 1fr;
+  }
+
+  body.diagnosis-page .scene-stress-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.diagnosis-page .main-card-image img {
+    max-width: 240px;
+    max-height: 300px;
+  }
+
+  body.diagnosis-page .result-wrapper {
+    padding: 22px;
+  }
+}
+
+/* ============================================================
+  6) Result-only Gorgeous Theme
+  ✅ 絶対ルール: result-mode がある時だけ効く
+============================================================ */
+
+/* --- Group key bridge (data-group) -> type variables --- */
+body.diagnosis-page.result-mode[data-group="flexible_eater"] {
+  --type-main: #FF9800;
+  --type-soft: #fff1dd;
+  --type-dark: #b85e00;
+  --type-glow: rgba(255, 152, 0, 0.30);
+}
+
+body.diagnosis-page.result-mode[data-group="strict_eater"] {
+  --type-main: #ef4444;
+  --type-soft: #ffecec;
+  --type-dark: #b83232;
+  --type-glow: rgba(239, 68, 68, 0.28);
+}
+
+body.diagnosis-page.result-mode[data-group="adventurous_eater"] {
+  --type-main: #8b5cf6;
+  --type-soft: #f3eafd;
+  --type-dark: #5e2e91;
+  --type-glow: rgba(139, 92, 246, 0.30);
+}
+
+body.diagnosis-page.result-mode[data-group="health_conscious"] {
+  --type-main: #22c55e;
+  --type-soft: #eaf7ef;
+  --type-dark: #1d7a4d;
+  --type-glow: rgba(34, 197, 94, 0.26);
+}
+
+/* safety fallback */
+body.diagnosis-page.result-mode:not([data-group]) {
+  --type-main: var(--accent);
+  --type-soft: var(--accent-soft);
+  --type-dark: #1d7a4d;
+  --type-glow: rgba(47, 163, 107, 0.25);
+}
+
+/* accent sync (so whole UI gains color) */
+body.diagnosis-page.result-mode[data-group] {
+  --accent: var(--type-main);
+  --accent-soft: var(--type-soft);
+}
+
+/* background world */
+body.diagnosis-page.result-mode[data-group] {
+  background:
+    radial-gradient(circle at 15% 0%, var(--type-glow), transparent 55%),
+    radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.55), transparent 50%),
+    var(--bg-main);
+}
+
+/* wrapper hero card */
+body.diagnosis-page.result-mode[data-group] .result-wrapper {
+  border: none !important;
+  background: linear-gradient(180deg, #ffffff, #fbf9ff);
+  box-shadow:
+    0 26px 80px var(--type-glow),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+body.diagnosis-page.result-mode[data-group] .result-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 120px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.0), var(--type-soft), rgba(255, 255, 255, 0.0));
+  opacity: .9;
+  pointer-events: none;
+}
+
+/* title + code */
+body.diagnosis-page.result-mode[data-group] .result-title {
+  color: var(--type-dark);
+  font-size: 24px;
+  letter-spacing: .03em;
+  position: relative;
+  z-index: 1;
+}
+
+body.diagnosis-page.result-mode[data-group] .result-code {
+  color: var(--type-main) !important;
+  text-shadow: 0 10px 30px var(--type-glow);
+  font-size: 46px !important;
+  margin-bottom: 12px !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* main card glass */
+body.diagnosis-page.result-mode[data-group] .result-main-card {
+  border: none !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), var(--type-soft));
+  box-shadow: 0 18px 48px var(--type-glow);
+  position: relative;
+  z-index: 1;
+}
+
+/* image spotlight */
+body.diagnosis-page.result-mode[data-group] .main-card-image {
+  border: none !important;
+  background:
+    radial-gradient(circle at 50% 40%, var(--type-glow), transparent 65%),
+    #ffffff;
+  box-shadow:
+    0 14px 34px var(--type-glow),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+body.diagnosis-page.result-mode[data-group] .main-card-image img {
+  filter: drop-shadow(0 18px 26px var(--type-glow));
+}
+
+/* group badge jewel */
+body.diagnosis-page.result-mode[data-group] .group-label {
+  background: linear-gradient(135deg, var(--type-main), var(--type-dark));
   color: #fff;
-  font-size: 36px;
-  border: none;
-  box-shadow: var(--shadow-md);
-  cursor: pointer;
+  border: none !important;
+  box-shadow: 0 10px 22px var(--type-glow);
+}
+
+/* unified cards */
+body.diagnosis-page.result-mode[data-group] .personality-section,
+body.diagnosis-page.result-mode[data-group] .scene-card,
+body.diagnosis-page.result-mode[data-group] .stress-card,
+body.diagnosis-page.result-mode[data-group] .aruaru-section {
+  border: none !important;
+  background: linear-gradient(180deg, #ffffff, #fbf9ff);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* headline accent line */
+body.diagnosis-page.result-mode[data-group] h3::after,
+body.diagnosis-page.result-mode[data-group] h4::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--type-main), transparent);
+  opacity: .9;
+}
+
+/* buttons */
+body.diagnosis-page.result-mode[data-group] button,
+body.diagnosis-page.result-mode[data-group] .btn {
+  border-radius: 12px;
+}
+
+body.diagnosis-page.result-mode[data-group] .btn-primary,
+body.diagnosis-page.result-mode[data-group] button.btn-success,
+body.diagnosis-page.result-mode[data-group] .btn-success {
+  background: linear-gradient(135deg, var(--type-main), var(--type-dark)) !important;
+  border: none !important;
+  box-shadow: 0 12px 28px var(--type-glow) !important;
+}
+
+body.diagnosis-page.result-mode[data-group] .btn-primary:hover,
+body.diagnosis-page.result-mode[data-group] button.btn-success:hover,
+body.diagnosis-page.result-mode[data-group] .btn-success:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  transition: .2s;
+}
+
+/* small text */
+body.diagnosis-page.result-mode[data-group] .result-main-card p {
+  color: rgba(0, 0, 0, 0.62);
+}
+
+body.dark.diagnosis-page.result-mode[data-group] .result-main-card p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ============================================================
+  7) Trait Bars - Gorgeous (result only)
+============================================================ */
+body.diagnosis-page.result-mode[data-group] #trait-bars {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+body.diagnosis-page.result-mode[data-group] .trait-bar {
+  display: grid;
+  grid-template-columns: 72px 1fr 72px;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 14px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff, #fbf9ff);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.diagnosis-page.result-mode[data-group] .trait-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(0, 0, 0, 0.55);
+  white-space: nowrap;
+}
+
+body.diagnosis-page.result-mode[data-group] .trait-label.left {
+  text-align: left;
+}
+
+body.diagnosis-page.result-mode[data-group] .trait-label.right {
+  text-align: right;
+}
+
+body.diagnosis-page.result-mode[data-group] .bar-wrapper {
+  position: relative;
+  padding-top: 18px;
+}
+
+/* track */
+body.diagnosis-page.result-mode[data-group] .bar {
+  position: relative;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* dotted scale */
+body.diagnosis-page.result-mode[data-group] .bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 8px 50%, rgba(0, 0, 0, .18) 1.2px, transparent 1.3px) repeat-x;
+  background-size: 20px 100%;
+  opacity: .35;
+  pointer-events: none;
+}
+
+/* fill */
+body.diagnosis-page.result-mode[data-group] .bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--type-main), var(--type-dark));
+}
+
+/* dot */
+body.diagnosis-page.result-mode[data-group] .bar-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid var(--type-main);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+}
+
+/* percent label */
+body.diagnosis-page.result-mode[data-group] .bar-percent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(-6px);
+  font-weight: 900;
+  font-size: 13px;
+  color: var(--type-dark);
+  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
+}
+
+/* axis colors */
+body.diagnosis-page.result-mode[data-group] .bar.blue .bar-fill {
+  background: linear-gradient(90deg, #2f6fd6, #1f4fa8);
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.blue~.bar-percent {
+  color: #1f4fa8;
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.blue .bar-dot {
+  border-color: #2f6fd6;
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.gold .bar-fill {
+  background: linear-gradient(90deg, #f59e0b, #b45309);
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.gold~.bar-percent {
+  color: #b45309;
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.gold .bar-dot {
+  border-color: #f59e0b;
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.green .bar-fill {
+  background: linear-gradient(90deg, #22c55e, #1d7a4d);
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.green~.bar-percent {
+  color: #1d7a4d;
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.green .bar-dot {
+  border-color: #22c55e;
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.purple .bar-fill {
+  background: linear-gradient(90deg, #8b5cf6, #5e2e91);
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.purple~.bar-percent {
+  color: #5e2e91;
+}
+
+body.diagnosis-page.result-mode[data-group] .bar.purple .bar-dot {
+  border-color: #8b5cf6;
+}
+
+@media (max-width:640px) {
+  body.diagnosis-page.result-mode[data-group] .trait-bar {
+    grid-template-columns: 56px 1fr 56px;
+    padding: 12px 12px;
+  }
+}
+/* ===============================
+   トップ画像を画面横幅いっぱいに
+=============================== */
+.top-image {
+  padding: 0;              /* 余白を消す */
+}
+
+.top-image img {
+  width: 100vw;            /* 画面幅いっぱい */
+  max-width: 100%;         /* 制限解除 */
+  height: auto;
+  border-radius: 0;        /* 角丸を消す（好みで） */
+  box-shadow: none;        /* 影を消す（好みで） */
 }

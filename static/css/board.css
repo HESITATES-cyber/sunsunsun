@@ -1,297 +1,393 @@
+/* ============================================================
+   board.css（最終・崩れない完全版 / 上書き用）
+   - 左：タイプ一覧(side-panel)は維持
+   - 右：掲示板(main.board-main)だけTwitter風
+   - HTMLが多少バラバラでも崩れにくい
+   - 1枚目img = アイコン
+   - .post-actions = 右下
+============================================================ */
+
 /* ===============================
-   デザイン変数（最終完成）
+   デザイン変数
 =============================== */
-:root {
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --card-soft: #f9fafb;
+:root{
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --card-soft:#f9fafb;
 
-  --main: #2dd4bf;
-  --main-soft: #e6fffa;
+  --main:#2dd4bf;
+  --main-soft:#e6fffa;
 
-  --text: #0f172a;
-  --muted: #64748b;
-  --border: #e5e7eb;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e5e7eb;
 
-  --radius: 18px;
+  --radius:18px;
 
-  --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
-  --shadow-md: 0 12px 28px rgba(0,0,0,0.08);
+  --shadow-sm:0 4px 12px rgba(0,0,0,.04);
+  --shadow-md:0 12px 28px rgba(0,0,0,.08);
 }
 
 /* ===============================
-   ダークモード変数
+   ダークモード
 =============================== */
-body.dark {
-  --bg: #0f172a;
-  --card: #111827;
-  --card-soft: #0b1220;
+body.dark{
+  --bg:#0f172a;
+  --card:#111827;
+  --card-soft:#0b1220;
 
-  --text: #e5e7eb;
-  --muted: #94a3b8;
-  --border: #1f2933;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --border:#1f2933;
 
-  --shadow-sm: 0 4px 12px rgba(0,0,0,0.4);
-  --shadow-md: 0 16px 32px rgba(0,0,0,0.6);
+  --shadow-sm:0 4px 12px rgba(0,0,0,.4);
+  --shadow-md:0 16px 32px rgba(0,0,0,.6);
 }
 
 /* ===============================
    全体
 =============================== */
-html, body {
-  height: 100%;
-  margin: 0;
-  background: var(--bg);
-  font-family: "Inter", system-ui, sans-serif;
-  color: var(--text);
+html, body{
+  height:100%;
+  margin:0;
+  background:var(--bg);
+  font-family:"Inter", system-ui, sans-serif;
+  color:var(--text);
 }
 
 /* ===============================
    ヘッダー
 =============================== */
-.header {
-  height: 72px;
-  background: color-mix(in srgb, var(--card) 85%, transparent);
+.header{
+  height:72px;
+  background:color-mix(in srgb, var(--card) 85%, transparent);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  padding: 0 28px;
-  position: sticky;
-  top: 0;
-  z-index: 2000;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:2000;
 }
 
 /* ===============================
    レイアウト
 =============================== */
-.board-container {
-  height: calc(100vh - 72px);
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 28px 20px;
-  display: flex;
-  gap: 28px;
-  box-sizing: border-box;
+.board-container{
+  height:calc(100vh - 72px);
+  max-width:1400px;
+  margin:0 auto;
+  padding:28px 20px;
+  display:flex;
+  gap:28px;
+  box-sizing:border-box;
 }
 
 /* ===============================
-   サイド（タイプ一覧）
+   サイド（タイプ一覧）※触らない
 =============================== */
-.side-panel {
-  width: 260px;
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow-md);
-  overflow-y: auto;
+.side-panel{
+  width:260px;
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:var(--shadow-md);
+  overflow-y:auto;
+}
+.side-panel::-webkit-scrollbar{ display:none; }
+
+.type-group{
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+  margin:20px 0 10px;
+  letter-spacing:.05em;
 }
 
-.side-panel::-webkit-scrollbar { display: none; }
-
-.type-group {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--muted);
-  margin: 20px 0 10px;
-  letter-spacing: 0.05em;
+.type-btn{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--card-soft);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:12px;
+  margin-bottom:10px;
+  cursor:pointer;
+  transition:.2s;
+  color:var(--text);
 }
+.type-btn img{ width:34px; }
 
-/* タイプボタン */
-.type-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--card-soft);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 12px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: 0.2s;
-  color: var(--text);
-}
-
-.type-btn img { width: 34px; }
-
-.type-btn:hover {
-  background: var(--main-soft);
+.type-btn:hover{
+  background:var(--main-soft);
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
-
-/* アクティブ */
-.type-btn.active {
-  background: var(--card);
-  border-left: 4px solid var(--main);
+.type-btn.active{
+  background:var(--card);
+  border-left:4px solid var(--main);
   box-shadow: var(--shadow-md);
   transform: translateX(2px);
-  font-weight: 700;
+  font-weight:700;
 }
 
 /* ===============================
-   メイン掲示板
+   メイン掲示板（右カラム）
 =============================== */
-.board-main {
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 6px;
+.board-main{
+  flex:1;
+  overflow-y:auto;
+  padding-right:10px;
 }
-
-.board-main::-webkit-scrollbar { width: 6px; }
-.board-main::-webkit-scrollbar-thumb {
+.board-main::-webkit-scrollbar{ width:6px; }
+.board-main::-webkit-scrollbar-thumb{
   background: var(--border);
-  border-radius: 4px;
+  border-radius:4px;
 }
 
 /* ===============================
    掲示板ヘッダー
 =============================== */
-.board-header {
-  background: linear-gradient(
-    to bottom,
-    var(--card),
-    var(--card-soft)
-  );
-  border-radius: 22px;
-  padding: 22px 24px;
+.board-header{
+  background: linear-gradient(to bottom, var(--card), var(--card-soft));
+  border-radius:22px;
+  padding:22px 24px;
   box-shadow: var(--shadow-md);
-  margin-bottom: 22px;
+  margin-bottom:22px;
 }
-
-.board-title-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.board-title-row{
+  display:flex;
+  align-items:center;
+  gap:16px;
 }
-
-.board-title-row h2 {
-  font-size: 26px;
-  font-weight: 800;
+.board-title-row h2{
+  font-size:26px;
+  font-weight:800;
 }
-
-.my-type-indicator {
-  font-size: 14px;
+.my-type-indicator{
+  font-size:14px;
   color: var(--muted);
 }
-
-.my-type-indicator strong {
+.my-type-indicator strong{
   background: var(--main);
-  color: #ffffff;
-  padding: 4px 14px;
-  border-radius: 999px;
-  font-weight: 700;
-}
-
-/* ===============================
-   投稿カード
-=============================== */
-.post {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 16px 18px;
-  margin-bottom: 14px;
-  transition: 0.15s;
-}
-
-.post:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-/* 自分の投稿 */
-.my-post {
-  border-left: 4px solid var(--main);
-}
-
-/* 投稿メタ */
-.post-meta {
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-
-.post-text {
-  font-size: 15px;
-  line-height: 1.65;
-}
-
-/* ===============================
-   投稿アクション
-=============================== */
-.post-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
-.post-actions button {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 999px;
-  transition: 0.15s;
-  color: var(--muted);
-}
-
-.post-actions button:hover {
-  background: var(--main-soft);
-  color: var(--main);
+  color:#fff;
+  padding:4px 14px;
+  border-radius:999px;
+  font-weight:700;
 }
 
 /* ===============================
    FAB
 =============================== */
-#fab {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: none;
-  background: var(--main);
-  color: #ffffff;
-  font-size: 26px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 14px 32px rgba(45,212,191,0.45);
-  transition: 0.2s;
-  z-index: 5000;
+#fab{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  border:none;
+  background:var(--main);
+  color:#fff;
+  font-size:26px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 14px 32px rgba(45,212,191,.45);
+  transition:.2s;
+  z-index:5000;
 }
-
-#fab:hover {
-  transform: scale(1.1);
-}
+#fab:hover{ transform:scale(1.1); }
 
 /* ===============================
    モーダル
 =============================== */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(15,23,42,0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 6000;
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:6000;
+}
+.modal-box{
+  background:var(--card);
+  color:var(--text);
+  border-radius:20px;
+  padding:24px;
+  width:420px;
+  box-shadow:var(--shadow-md);
 }
 
-.modal-box {
-  background: var(--card);
-  color: var(--text);
-  border-radius: 20px;
-  padding: 24px;
-  width: 420px;
+.hidden{ display:none; }
+
+/* ============================================================
+   ✅ 右カラム限定：Twitter風（崩れない設計）
+============================================================ */
+
+/* 投稿一覧幅 */
+main.board-main #post-list{
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* 投稿カード（ベース） */
+main.board-main #post-list .post{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:14px 16px;
+  margin-bottom:14px;
+  box-shadow: var(--shadow-sm);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+
+  display:grid;
+  grid-template-columns: 44px 1fr;
+  gap: 12px;
+  align-items: start; /* ←統合：微調整込み */
+}
+
+main.board-main #post-list .post:hover{
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+  border-color: color-mix(in srgb, var(--border) 70%, var(--main) 30%);
 }
 
-/* ===============================
-   その他
-=============================== */
-.hidden { display: none; }
+/* 1枚目の画像：アイコン扱い（左カラム） */
+main.board-main #post-list .post img:first-of-type{
+  grid-column: 1;
+  width:44px;
+  height:44px;
+  border-radius:999px;
+  object-fit:cover;
+  border:1px solid var(--border);
+  background:var(--card-soft);
+  margin:2px 0 0; /* ←統合：微調整込み */
+}
+
+/* それ以外は全部右カラム */
+main.board-main #post-list .post > *:not(img:first-of-type){
+  grid-column: 2;
+  min-width: 0;
+}
+
+/* 名前・日時（.post-meta があれば整える） */
+main.board-main #post-list .post .post-meta{
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+
+  display: inline-flex;   /* ←統合：微調整込み */
+  gap: 8px;
+  align-items: baseline;
+
+  margin: 0 0 8px;        /* ←統合：微調整込み */
+}
+
+/* 本文：投稿直下のテキスト要素だけ整える（安全） */
+main.board-main #post-list .post > :where(p, div, span){
+  margin: 0;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+  word-break: break-word;
+}
+
+/* 投稿画像（2枚目以降）をメディア扱いで大きく */
+main.board-main #post-list .post img:not(:first-of-type){
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card-soft);
+  margin-top: 10px;
+}
+
+/* アクション：右下 */
+main.board-main #post-list .post .post-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:14px;
+  margin-top:12px; /* ←統合：微調整込み */
+  align-items:center;
+}
+
+main.board-main #post-list .post .post-actions button,
+main.board-main #post-list .post .post-actions a{
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  padding:6px 10px;
+  border-radius:999px;
+  color:var(--muted);
+  transition:.15s;
+  text-decoration:none;
+}
+main.board-main #post-list .post .post-actions button:hover,
+main.board-main #post-list .post .post-actions a:hover{
+  background: var(--main-soft);
+  color: var(--main);
+}
+
+/* 自分の投稿 */
+main.board-main #post-list .post.my-post{
+  border-left:4px solid var(--main);
+}
+
+/* スマホ */
+@media (max-width:700px){
+  .board-container{
+    padding:18px 14px;
+    gap:18px;
+  }
+  main.board-main #post-list{
+    max-width:100%;
+  }
+  main.board-main #post-list .post{
+    grid-template-columns:40px 1fr;
+    gap:10px;
+    padding:12px 14px;
+  }
+  main.board-main #post-list .post img:first-of-type{
+    width:40px;
+    height:40px;
+  }
+}
+
+/* ============================================================
+   空状態（投稿なし）メッセージの謎改行対策
+   - 投稿カード(.post)じゃない文章だけを整形
+============================================================ */
+
+/* #post-list 直下の「投稿がない時のメッセージ」を1行整形 */
+main.board-main #post-list > :not(.post){
+  white-space: normal;
+  line-height: 1.6;
+}
+
+/* もし <br> が入ってるなら消す（空状態だけ） */
+main.board-main #post-list > :not(.post) br{
+  display: none;
+}
+
+/* ============================================================
+   空状態メッセージ（投稿なし）の崩れ対策：横書き固定
+============================================================ */
+
+/* #post-list 直下にある .post 以外（空メッセージ想定） */
+main.board-main #post-list > :not(.post){
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+
+  /* 1文字改行を防ぐ */
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  white-space: normal !important;
+}

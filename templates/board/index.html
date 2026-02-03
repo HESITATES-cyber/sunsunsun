@@ -1,156 +1,205 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-<meta charset="UTF-8">
-<title>🍽️ 食事タイプ診断</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-<style>
-/* 上ヘッダー */
-.diagnosis-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #f8f9fa;
-  padding: 10px;
-  text-align: center;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+  <meta charset="UTF-8">
+  <title>🍽️ 食事タイプ診断</title>
 
-/* 下フッター */
-.diagnosis-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #f8f9fa;
-  padding: 10px;
-  text-align: center;
-  z-index: 1000;
-  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-/* 質問部分の余白調整 */
-.questions-container {
-  margin-top: 80px;   /* 上ヘッダー分 */
-  margin-bottom: 60px; /* 下フッター分 */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  min-height: 300px; /* 必要に応じて調整 */
-}
-</style>
-</head>
-<body>
+  <!-- Bootstrap（ボタン等は使う） -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- ページヘッダー（既存） -->
-{% include "components/header.html" %}
+  <!-- あなたのCSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-<!-- 上ヘッダー：質問番号＋進行バー -->
-<div class="diagnosis-header" style="display:none;" id="diagnosis-header">
-  <span id="question-number">質問 1 / 10</span>
-  <div class="progress mt-1">
-    <div class="progress-bar" style="width:0%" id="header-progress"></div>
-  </div>
-</div>
-
-<!-- ヒーロー / トップ画面 -->
-<section id="home-screen" class="hero">
-  <div class="hero-inner">
-    <h1 class="hero-title">簡易 食事タイプ診断</h1>
-    <p class="hero-sub">丸をクリックして回答してください</p>
-    <button class="btn btn-primary btn-lg mt-4" id="start-btn">診断を始める</button>
-  </div>
-</section>
-
-<section id="top-only-image" class="top-image">
-  <img src="{% static 'img/picnic.png' %}" alt="トップ画像">
-</section>
-
-<!-- メイン -->
-<div class="container">
-
-  <div class="progress-container" style="display:none;">
-    <div class="progress-bar"></div>
-  </div>
-
-  <div class="questions-container" style="display:none;"></div>
-
-  <button class="btn btn-primary btn-lg mt-4" id="diagnose-btn" style="display:none;">
-    診断結果を見る！
-  </button>
-
-  <!-- 診断結果 -->
-  <section id="result-area" class="mt-5 p-4 border rounded shadow-sm" style="display:none;">
-    <h2 class="text-center text-success">診断結果</h2>
-    <div id="result-content"></div>
-
-    <section class="personality-section">
-      <h2 class="section-title"><span class="section-number">1</span> 性格特性</h2>
-      <div id="trait-bars"></div>
-
-      <div class="scene-stress-grid">
-        <div class="scene-card">
-          <h4>🍽️ 向いている食事シーン</h4>
-          <ul id="scene-list"></ul>
-        </div>
-
-        <div class="stress-card">
-          <h4>⚠️ ストレスを感じやすい瞬間</h4>
-          <ul id="stress-list"></ul>
-        </div>
-      </div>
-    </section>
-
-    <div class="d-grid gap-2 mt-4">
-      <button class="btn btn-outline-secondary" id="retry-btn">もう一度診断する</button>
-      <a href="{% url 'board:board' %}" class="btn btn-success" id="go-board-btn">掲示板で自分のタイプを見る</a>
-    </div>
-
-  </section>
-</div>
-
-<!-- 下フッター -->
-<div class="diagnosis-footer" style="display:none;" id="diagnosis-footer">
-  <button id="next-btn" class="btn btn-primary btn-lg">次へ</button>
-</div>
-
-<script src="{% static 'js/script.js' %}"></script>
-<script>
-document.getElementById("logo-link").addEventListener("click", e => {
-  e.preventDefault();
-  window.location.reload(); 
-});
-</script>
-
-<!-- 削除確認モーダル -->
-<div id="confirm-modal" hidden>
-  <div style="
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  ">
-    <div style="
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
+  <style>
+    /* =========================
+       上ヘッダー（質問番号＋進行）
+    ========================= */
+    .diagnosis-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 10px 14px;
       text-align: center;
-    ">
-      <p>削除しますか？</p>
-      <button id="confirm-yes">はい</button>
-      <button id="confirm-no">キャンセル</button>
+      z-index: 1200;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .diagnosis-header-inner {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    /* =========================
+       下フッター（次へボタン）
+    ========================= */
+    .diagnosis-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 10px;
+      text-align: center;
+      z-index: 1200;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    /* =========================
+       メイン余白（固定ヘッダー/フッター分）
+    ========================= */
+    .diagnosis-main {
+      padding-top: 90px;
+      /* ヘッダー分 */
+      padding-bottom: 90px;
+      /* フッター分 */
+    }
+
+    /* 質問コンテナの中央寄せ（JSがカードを作る） */
+    .questions-container {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      justify-content: center;
+      align-items: stretch;
+      text-align: center;
+      min-height: 300px;
+    }
+
+    /* 結果のBootstrap枠（テンプレ側で持たない＝味気なさの元）
+       style.css 側の #result-area / .result-wrapper を活かすため、ここは薄く */
+    #result-area {
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      padding: 0 !important;
+    }
+  </style>
+</head>
+
+<body class="diagnosis-page">
+
+  <!-- 共通ヘッダー -->
+  {% include "components/header.html" %}
+
+  <!-- 上ヘッダー：質問番号＋進行バー（JSで表示） -->
+  <div class="diagnosis-header" style="display:none;" id="diagnosis-header">
+    <div class="diagnosis-header-inner">
+      <div class="d-flex justify-content-between align-items-center">
+        <span id="question-number" style="font-weight:700;">質問 1 / 10</span>
+        <span id="answered-counter" style="font-size:12px; opacity:.65;"></span>
+      </div>
+      <div class="progress mt-2" style="height:10px; border-radius:999px; overflow:hidden;">
+        <div class="progress-bar" style="width:0%" id="header-progress"></div>
+      </div>
     </div>
   </div>
-</div>
+
+  <!-- ヒーロー / トップ画面 -->
+  <section id="home-screen" class="hero">
+    <div class="hero-inner">
+      <h1 class="hero-title">簡易 食事タイプ診断</h1>
+      <p class="hero-sub">丸をクリックして回答してください</p>
+      <button class="btn btn-primary btn-lg mt-4" id="start-btn">診断を始める</button>
+    </div>
+  </section>
+
+  <section id="top-only-image" class="top-image">
+    <img src="{% static 'img/picnic.png' %}" alt="トップ画像">
+  </section>
+
+  <!-- メイン -->
+  <main class="diagnosis-main">
+    <div class="container">
+
+      <!-- 質問（JSが中身を生成） -->
+      <div class="questions-container" style="display:none;"></div>
+
+      <!-- 診断ボタン -->
+      <button class="btn btn-primary btn-lg mt-4" id="diagnose-btn" style="display:none;">
+        診断結果を見る！
+      </button>
+
+      <!-- 診断結果 -->
+      <section id="result-area" class="mt-4" style="display:none;">
+
+        <!-- JSがここに result-wrapper を生成する -->
+        <div id="result-content"></div>
+
+        <!-- 4軸バー＋シーン／ストレス＋あるある（JSで埋める） -->
+        <section class="personality-section">
+          <h2 class="section-title"><span class="section-number">1</span> 性格特性</h2>
+
+          <!-- JSが trait-bar をここに追加 -->
+          <div id="trait-bars"></div>
+
+          <div class="scene-stress-grid">
+            <div class="scene-card">
+              <h4>🍽️ 向いている食事シーン</h4>
+              <ul id="scene-list"></ul>
+            </div>
+
+            <div class="stress-card">
+              <h4>⚠️ ストレスを感じやすい瞬間</h4>
+              <ul id="stress-list"></ul>
+            </div>
+          </div>
+
+          <!-- 「このタイプのあるある」はJSがこのセクション末尾に追加する -->
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <!-- JS -->
+  <script src="{% static 'js/script.js' %}"></script>
+
+  <!-- ロゴクリックでリロード（logo-link がないページでも落ちないようにガード） -->
+  <script>
+    const logo = document.getElementById("logo-link");
+    if (logo) {
+      logo.addEventListener("click", e => {
+        e.preventDefault();
+        window.location.reload();
+      });
+    }
+  </script>
+
+  <!-- 削除確認モーダル（掲示板用：ここに残すなら hidden のままでOK） -->
+  <div id="confirm-modal" hidden>
+    <div style="
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    ">
+      <div style="
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+        min-width: 260px;
+      ">
+        <p style="margin:0 0 14px;">削除しますか？</p>
+        <button id="confirm-yes" class="btn btn-danger btn-sm">はい</button>
+        <button id="confirm-no" class="btn btn-secondary btn-sm">キャンセル</button>
+      </div>
+    </div>
+  </div>
 
 </body>
+
 </html>
