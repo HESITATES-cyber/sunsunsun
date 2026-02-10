@@ -47,9 +47,12 @@
       font-size: 14px;
       border-radius: 6px;
       border: 1px solid #ccc;
+      box-sizing: border-box;
     }
 
-    button {
+    /* ✅ ログイン/新規登録 共通ボタン */
+    .btn-main {
+      display: block;
       width: 100%;
       padding: 12px;
       border: none;
@@ -58,10 +61,20 @@
       color: #fff;
       font-size: 15px;
       cursor: pointer;
+      text-align: center;
+      text-decoration: none; /* aタグ用 */
+      box-sizing: border-box;
     }
 
-    button:hover {
+    .btn-main:hover {
       opacity: 0.9;
+    }
+
+    .or {
+      margin: 12px 0;
+      text-align: center;
+      color: #777;
+      font-size: 14px;
     }
 
     .errorlist {
@@ -76,13 +89,18 @@
 <body>
 
   <div class="login-card">
-    <h1>ログイン</h1>
-    <p>ログインしてください</p>
+    <h1>ログイン または 新規登録</h1>
+    <p>ログインするか、アカウントを作成してください</p>
 
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit">ログイン</button>
+
+      <button type="submit" class="btn-main">ログイン</button>
+
+      <div class="or">または</div>
+
+      <a href="{% url 'accounts:signup' %}" class="btn-main">新規登録</a>
     </form>
   </div>
 

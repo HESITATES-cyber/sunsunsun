@@ -1,0 +1,404 @@
+/* ============================================================
+  result.css（結果ページ専用・整理版）
+  - 影響範囲は body.result-page 配下のみ
+  - JSは :root に --theme-color / --theme-bg を設定
+  - 本CSSは --tc / --tbg に橋渡しして使用
+============================================================ */
+
+/* ===============================
+   0) Theme Bridge
+=============================== */
+:root{
+    --tc: var(--theme-color, #8b5cf6);
+    --tbg: var(--theme-bg, #f8fafc);
+  }
+  
+  /* ===============================
+     1) Background（中央上だけ淡光）
+  =============================== */
+  body.result-page{
+    background:
+      radial-gradient(820px 420px at 50% 120px,
+        color-mix(in srgb, var(--tc) 10%, transparent),
+        transparent 68%),
+      linear-gradient(#f8fafc, #f2f4f8) !important;
+  }
+  
+  /* ===============================
+     2) Layout：センター固定
+  =============================== */
+  body.result-page .diagnosis-main{
+    padding-bottom: 40px;
+  }
+  
+  body.result-page #result-area{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  
+  /* ===============================
+     3) Report Sheet：1枚レポート
+  =============================== */
+  body.result-page .result-sheet{
+    width:100%;
+    max-width:780px;
+    padding:20px 22px 28px;
+    border-radius:22px;
+    background:#fff;
+    border:1px solid rgba(0,0,0,.08);
+    box-shadow: 0 20px 70px rgba(15, 23, 42, .12);
+    position:relative;
+  }
+  
+  /* ===============================
+     4) Header
+  =============================== */
+  body.result-page .result-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    margin-bottom:12px;
+  
+    /* 右上タイプの見え方確保 */
+    padding-right: 140px;
+  }
+  
+  body.result-page .result-title{
+    font-size:16px;
+    font-weight:800;
+    margin:0;
+    letter-spacing:.02em;
+  }
+  
+  /* ===============================
+     5) Watermark（右上タイプ）
+     - まっすぐ
+     - 普通の太字（ゴシック）
+     - opacityは今の感じ（0.75）
+     - 前面表示
+  =============================== */
+  body.result-page #result-watermark{
+    position:absolute;
+    top:6px;
+    right:14px;
+  
+    font-size:52px;
+    font-weight:900;
+    font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans JP", sans-serif;
+    letter-spacing:.08em;
+  
+    color: color-mix(in srgb, var(--tc) 38%, transparent);
+    opacity:.75;
+  
+    transform:none;
+    z-index:50;
+    pointer-events:none;
+    user-select:none;
+  }
+  
+  /* ===============================
+     6) Hero Main Card（主役）
+  =============================== */
+  body.result-page #result-content{
+    margin-top: 6px;
+  }
+  
+  body.result-page #result-content .result-main-card{
+    display:grid !important;
+    grid-template-columns: 170px 1fr !important;
+    gap:16px !important;
+    align-items:center !important;
+  
+    padding:14px 16px;
+    border-radius:16px;
+    border:1px solid color-mix(in srgb, var(--tc) 18%, rgba(0,0,0,.08));
+    box-shadow: 0 18px 50px rgba(15,23,42,.10);
+  
+    background:
+      radial-gradient(260px 180px at 72px 82px,
+        color-mix(in srgb, var(--tc) 18%, transparent),
+        transparent 70%),
+      #fff;
+  
+    transform: translateY(-10px);
+  
+    position:relative;
+    z-index:1;
+  }
+  
+  /* 画像 */
+  body.result-page .main-card-image{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    overflow:hidden;
+  }
+  
+  body.result-page .main-card-image img{
+    max-width:150px;
+    height:auto;
+    display:block;
+  }
+  
+  /* テキスト */
+  body.result-page .hero-text{
+    max-width:420px;
+  }
+  body.result-page .hero-text h3{
+    margin:0 0 6px 0;
+    font-size:18px;
+    font-weight:900;
+  }
+  body.result-page .hero-text p{
+    margin-top:4px;
+    margin-bottom:0;
+    color: rgba(0,0,0,.62);
+    line-height:1.55;
+    font-size: 13px;
+  }
+  
+  /* badges / tags */
+  body.result-page .hero-badges{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-start;
+    gap:6px;
+    margin-top:10px;
+  }
+  
+  body.result-page .tag-pill,
+  body.result-page .group-label{
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:12px;
+    line-height:1;
+    border:1px solid rgba(0,0,0,.12);
+    background:#fff;
+    color:rgba(0,0,0,.72);
+  }
+  
+  body.result-page .group-label{
+    background: color-mix(in srgb, var(--tc) 12%, #fff);
+    border-color: color-mix(in srgb, var(--tc) 30%, rgba(0,0,0,.12));
+    color: color-mix(in srgb, var(--tc) 90%, #111);
+  }
+  
+  /* モバイル */
+  @media (max-width:720px){
+    body.result-page #result-content .result-main-card{
+      grid-template-columns:1fr !important;
+      transform:none;
+    }
+    body.result-page .hero-text{
+      max-width:none;
+    }
+  }
+  
+  /* ===============================
+     7) Sections
+  =============================== */
+  body.result-page .section-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:14px;
+    font-weight:900;
+    margin: 18px 0 12px;
+  }
+  
+  body.result-page .section-number{
+    width:22px;
+    height:22px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:6px;
+    background: color-mix(in srgb, var(--tc) 20%, white);
+    color: color-mix(in srgb, var(--tc) 90%, #111);
+    font-weight:900;
+    font-size:12px;
+  }
+  
+  /* ===============================
+     8) Trait Bars（横並び）
+  =============================== */
+  body.result-page .trait-bar{
+    display:grid;
+    grid-template-columns: 52px 1fr 52px;
+    gap:10px;
+    align-items:center;
+    margin: 10px 0 14px;
+  }
+  
+  body.result-page .trait-label{
+    font-size:12px;
+    color: rgba(0,0,0,.55);
+    white-space:nowrap;
+  }
+  
+  body.result-page .bar-wrapper{
+    margin-top:0;
+  }
+  
+  body.result-page .bar{
+    position:relative;
+    height:10px;
+    border-radius:999px;
+    background: rgba(0,0,0,.10);
+    overflow:hidden;
+  }
+  
+  body.result-page .bar-fill{
+    height:100%;
+    border-radius:999px;
+    background: color-mix(in srgb, var(--tc) 85%, #fff);
+  }
+  
+  body.result-page .bar-dot{
+    position:absolute;
+    top:50%;
+    transform: translate(-50%, -50%);
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#fff;
+    border:2px solid color-mix(in srgb, var(--tc) 75%, #fff);
+    box-shadow: 0 6px 14px rgba(15,23,42,.12);
+  }
+  
+  body.result-page .bar-percent{
+    display:block;
+    margin-top:6px;
+    font-size:11px;
+    font-weight:800;
+    opacity:.75;
+    color: rgba(0,0,0,.55);
+  }
+  
+  /* ===============================
+     9) Scene / Stress cards（左縦アクセント）
+  =============================== */
+  body.result-page .scene-stress-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top: 10px;
+  }
+  
+  @media (max-width:720px){
+    body.result-page .scene-stress-grid{
+      grid-template-columns:1fr;
+    }
+  }
+  
+  body.result-page .scene-card{
+    position:relative;
+    overflow:hidden;
+    border-radius:14px;
+    border:1px solid rgba(0,0,0,.08);
+    background:#fff;
+    padding: 12px 12px 10px;
+  }
+  
+  body.result-page .scene-card::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:10px;
+    bottom:10px;
+    width:4px;
+    border-radius:999px;
+    background: color-mix(in srgb, var(--tc) 92%, #fff);
+    opacity: 1;
+  }
+  
+  body.result-page .scene-card h4,
+  body.result-page .scene-card ul{
+    padding-left:12px;
+    margin:0;
+  }
+  
+  body.result-page .scene-card h4{
+    font-size: 13px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  
+  body.result-page .scene-card ul{
+    padding-left: 24px;
+  }
+  
+  body.result-page .scene-card li{
+    font-size: 12px;
+    color: rgba(0,0,0,.70);
+    margin: 4px 0;
+  }
+  
+  /* ===============================
+     10) Aruaru（カード化 + 見出しドット）
+  =============================== */
+  body.result-page .aruaru-section{
+    margin-top: 12px;
+    padding: 12px 12px 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,.08);
+    background:#fff;
+  }
+  
+  body.result-page .aruaru-title{
+    font-size: 13px;
+    font-weight: 900;
+    margin: 0 0 8px 0;
+  
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  
+  body.result-page .aruaru-title::before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:999px;
+    background: var(--tc);
+  }
+  
+  body.result-page .aruaru-list{
+    margin:0;
+    padding-left:18px;
+  }
+  
+  body.result-page .aruaru-list li{
+    font-size: 12px;
+    color: rgba(0,0,0,.70);
+    margin: 4px 0;
+  }
+  
+  /* ===============================
+     11) CTA（カードと同じ幅）
+  =============================== */
+  body.result-page .result-actions-wrap{
+    width:100%;
+    max-width:780px;
+    margin-top: 12px;
+  }
+  
+  body.result-page .result-actions-wrap .btn{
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-weight: 900;
+  }
+  
+  body.result-page .result-actions-wrap .btn-success{
+    background: var(--tc);
+    border-color: var(--tc);
+    box-shadow: 0 14px 36px color-mix(in srgb, var(--tc) 45%, transparent);
+  }
+  
+  body.result-page .result-actions-wrap .btn-outline-secondary{
+    border-color: rgba(0,0,0,.18);
+    color: rgba(0,0,0,.70);
+  }
+  

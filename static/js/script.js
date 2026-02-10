@@ -1,3 +1,24 @@
+/* =====================================================
+   script.js（置き換え用・完全版）
+   ✅ index.html（診断画面）と result.html（結果画面）を分離
+   - 診断完了 → sessionStorage に保存 → /result/ へ遷移
+   - result.html → sessionStorage を読み込んで結果を描画
+   ===================================================== */
+
+/* =========================
+   ルーティング/保存キー
+========================= */
+const ROUTES = {
+  index: "/",
+  result: "/result/",
+  board: "/board/",
+};
+
+const STORAGE_KEYS = {
+  result: "diagnosisResult",
+  myType: "myType",
+};
+
 /* =========================
    性格特性バー定義
 ========================= */
@@ -36,24 +57,22 @@ function byId(id) {
 
 /* =========================
    重要：テーマ汚染を防ぐ初期化
-   （トップページが変になるのを防止）
 ========================= */
 function resetThemeState() {
-  // CSS分岐用属性を消す
-  delete document.body.dataset.group;
-  delete document.body.dataset.type;
+  if (document.body?.dataset) {
+    delete document.body.dataset.group;
+    delete document.body.dataset.type;
+    delete document.body.dataset.page; // 影響しないけど念のため
+  }
 
-  // 結果専用モードも消す（CSSで result-mode の時だけ装飾する想定）
   document.body.classList.remove("result-mode");
 
-  // もしCSSが --theme-color/--theme-bg を使ってても崩れないように一旦消す
   document.documentElement.style.removeProperty("--theme-color");
   document.documentElement.style.removeProperty("--theme-bg");
 }
 
 /* =========================
-   （保険）groupObj が取れない場合のフォールバックテーマ
-   ※あなたの実データに合わせて自由に調整OK
+   groupObj が取れない場合のフォールバックテーマ
 ========================= */
 const GROUP_THEME_FALLBACK = {
   flexible_eater: { color: "#FF9800", bg: "#2a1a08" },
@@ -68,8 +87,8 @@ const GROUP_THEME_FALLBACK = {
 async function loadData() {
   try {
     const [qRes, rRes] = await Promise.all([
-      fetch("/static/data/questions.json"),
-      fetch("/static/data/results.json")
+      fetch("/static/data/questions.json", { cache: "no-store" }),
+      fetch("/static/data/results.json", { cache: "no-store" })
     ]);
 
     questions = await qRes.json();
@@ -117,23 +136,20 @@ function updateHeaderProgress() {
   const answered = questions.filter(q => q.selected !== undefined).length;
   const total = questions.length || 1;
 
-  questionNumber.textContent = `質問 ${Math.min(answered + 1, total)} / ${total}`;
+  questionNumber.textContent = `質問 ${answered} / ${total}`;
   headerProgress.style.width = `${(answered / total) * 100}%`;
 }
 
 /* =========================
-   自作進捗バー更新
+   自作進捗バー更新 
 ========================= */
 function updateProgress() {
-  // 自作の進捗バー（.progress-container 内）
   const bar = $(".progress-container .progress-bar");
   if (bar) {
     const answered = questions.filter(q => q.selected !== undefined).length;
     const percent = (answered / questions.length) * 100;
     bar.style.width = percent + "%";
   }
-
-  // 上固定ヘッダーの進捗
   updateHeaderProgress();
 }
 
@@ -188,17 +204,13 @@ function renderPage() {
       else if (j === 4) label.classList.add("middle");
       else label.classList.add("right");
 
-      // すでに回答済みなら復元（戻った時）
       if (q.selected !== undefined && q.selected === parseInt(input.value, 10)) {
         input.checked = true;
       }
 
       input.addEventListener("change", () => {
         q.selected = parseInt(input.value, 10);
-
-        // クリック回答した時は「次へ」と同じ挙動
         moveNextFromCurrent(idx);
-
         updateProgress();
       });
 
@@ -239,7 +251,7 @@ function getActiveIndexOnPage() {
 function moveNextFromCurrent(idxOnPage) {
   const pageStart = currentPage * PAGE_SIZE;
   const pageEndIndexGlobal =
-    Math.min((currentPage + 1) * PAGE_SIZE, questions.length) - 1; // global index
+    Math.min((currentPage + 1) * PAGE_SIZE, questions.length) - 1;
   const pageEndIdxOnPage = pageEndIndexGlobal - pageStart;
 
   if (idxOnPage < pageEndIdxOnPage) {
@@ -248,11 +260,9 @@ function moveNextFromCurrent(idxOnPage) {
     currentPage++;
     renderPage();
   } else {
-    // 最後まで来た
     const diagnoseBtn = byId("diagnose-btn");
     if (diagnoseBtn) diagnoseBtn.style.display = "block";
 
-    // 最後のページでは次へボタンを隠す（表示したいならこの2行削除でOK）
     const footer = byId("diagnosis-footer");
     if (footer) footer.style.display = "none";
   }
@@ -267,7 +277,6 @@ function setupNextButton() {
     const pageStart = currentPage * PAGE_SIZE;
     const q = questions[pageStart + idx];
 
-    // 未回答の時は止める
     if (!q || q.selected === undefined) {
       alert("この質問に回答してください");
       return;
@@ -282,24 +291,45 @@ function setupNextButton() {
    テーマ反映（グループ分岐）
 ========================= */
 function applyGroupTheme({ typeCode, groupKey, groupObj }) {
-  // ✅ 結果表示時だけゴージャスCSSを効かせるため
   document.body.classList.add("result-mode");
 
-  // CSS分岐用（ここが最重要）
   document.body.dataset.type = typeCode || "";
   if (groupKey) document.body.dataset.group = groupKey;
 
-  // groupObj が無い/欠けてる時はフォールバック（壊れないため）
   const fallback = GROUP_THEME_FALLBACK[groupKey] || null;
-  const finalColor = groupObj?.color || fallback?.color;
-  const finalBg = groupObj?.bg || fallback?.bg;
 
-  if (finalColor) document.documentElement.style.setProperty("--theme-color", finalColor);
-  if (finalBg) document.documentElement.style.setProperty("--theme-bg", finalBg);
+  const main = (groupObj?.color || fallback?.color || "#8b5cf6");
+  const bg   = (groupObj?.bg    || fallback?.bg    || "#f8fafc");
+
+  // ✅ result.css は --tc を経由してこの色を見る
+  document.documentElement.style.setProperty("--theme-color", main);
+  document.documentElement.style.setProperty("--theme-bg", bg);
 }
 
 /* =========================
-   診断実行
+   診断集計 → typeCode
+========================= */
+function computeAxisScores() {
+  let axisScores = {};
+  for (let axis in results.axes) axisScores[axis] = 0;
+
+  questions.forEach(q => {
+    axisScores[q.axis] += q.selected;
+  });
+
+  return axisScores;
+}
+
+function computeTypeCode(axisScores) {
+  let typeCode = "";
+  for (let axis in axisScores) {
+    typeCode += judgeAxis(axisScores[axis], results.axes[axis]);
+  }
+  return typeCode;
+}
+
+/* =========================
+   ✅ index.html：診断実行 → 保存 → resultへ遷移
 ========================= */
 function setupDiagnose() {
   const diagnoseBtn = byId("diagnose-btn");
@@ -311,36 +341,14 @@ function setupDiagnose() {
       if (!questionsLoaded || !resultsLoaded) return;
     }
 
-    // 全問回答チェック
     const unanswered = questions.filter(q => q.selected === undefined);
     if (unanswered.length > 0) {
       alert("すべての質問に答えてください");
       return;
     }
 
-    // 集計
-    let axisScores = {};
-    for (let axis in results.axes) axisScores[axis] = 0;
-
-    questions.forEach(q => {
-      axisScores[q.axis] += q.selected;
-    });
-
-    // タイプ決定
-    let typeCode = "";
-    for (let axis in axisScores) {
-      typeCode += judgeAxis(axisScores[axis], results.axes[axis]);
-    }
-
-    // 画面切替（質問→結果）
-    const qContainer = $(".questions-container");
-    const pContainer = $(".progress-container");
-    if (qContainer) qContainer.style.display = "none";
-    if (pContainer) pContainer.style.display = "none";
-    diagnoseBtn.style.display = "none";
-    hideHeaderFooter();
-
-    // detail / group
+    const axisScores = computeAxisScores();
+    const typeCode = computeTypeCode(axisScores);
     const detail = results?.detail_types?.[typeCode];
     if (!detail) {
       console.error("detail_types に typeCode が見つからない:", typeCode);
@@ -348,149 +356,186 @@ function setupDiagnose() {
       return;
     }
 
-    // groupKey は「detail.group」に入っているキーをそのまま使う
-    // 例: "flexible_eater" / "strict_eater" など
-    const groupKey = detail.group || "";
-    const groupObj = results?.groups?.[groupKey] || null;
+    sessionStorage.setItem(
+      STORAGE_KEYS.result,
+      JSON.stringify({
+        typeCode,
+        axisScores,
+        createdAt: Date.now(),
+      })
+    );
 
-    // テーマ適用（ここで result-mode & dataset が付く）
-    applyGroupTheme({ typeCode, groupKey, groupObj });
+    localStorage.setItem(STORAGE_KEYS.myType, typeCode);
 
-    // 性格特性バー描画
-    const traitContainer = byId("trait-bars");
-    if (traitContainer) {
-      traitContainer.innerHTML = "";
-      for (let axis in axisScores) {
-        const percent = scoreToPercent(axisScores[axis]);
-        const meta = traitMeta[axis];
-        const isRight = percent >= 50;
-        const label = isRight ? meta.right : meta.left;
-
-        // ✅ 既存の inline style は維持しつつ、CSS強化用に --p も渡す
-        traitContainer.innerHTML += `
-          <div class="trait-bar" style="--p:${percent}">
-            <div class="trait-label left">${meta.left}</div>
-            <div class="bar-wrapper">
-              <div class="bar ${meta.color}">
-                <div class="bar-fill" style="width:${percent}%"></div>
-                <div class="bar-dot" style="left:${percent}%"></div>
-              </div>
-              <div class="bar-percent ${meta.color}">${percent}% ${label}</div>
-            </div>
-            <div class="trait-label right">${meta.right}</div>
-          </div>
-        `;
-      }
-    }
-
-    // 向いている食事シーン
-    const sceneList = byId("scene-list");
-    if (sceneList) {
-      sceneList.innerHTML = "";
-      (detail.scenes || []).forEach(s => {
-        const li = document.createElement("li");
-        li.textContent = s;
-        sceneList.appendChild(li);
-      });
-    }
-
-    // ストレス
-    const stressList = byId("stress-list");
-    if (stressList) {
-      stressList.innerHTML = "";
-      (detail.stress || []).forEach(s => {
-        const li = document.createElement("li");
-        li.textContent = s;
-        stressList.appendChild(li);
-      });
-    }
-
-    // あるある（増殖防止）
-    const section = $(".personality-section");
-    if (section) {
-      const oldAruaru = section.querySelector(".aruaru-section");
-      if (oldAruaru) oldAruaru.remove();
-
-      if (detail.aruaru && detail.aruaru.length) {
-        const aruaruHTML = document.createElement("div");
-        aruaruHTML.className = "aruaru-section";
-        aruaruHTML.innerHTML = `
-          <h3 class="aruaru-title">このタイプのあるある</h3>
-          <ul class="aruaru-list">${detail.aruaru.map(i => `<li>${i}</li>`).join("")}</ul>
-        `;
-        section.appendChild(aruaruHTML);
-      }
-    }
-
-    // 診断結果表示（メインカード）
-    const rc = byId("result-content");
-    if (rc) {
-      const label = groupObj?.label ?? groupKey ?? "";
-
-      // ✅ board URL をテンプレから受け取れない場合の保険（/board/ で固定してOKならそのまま）
-      const boardUrl = "/board/"; // ←必要なら自分のURLに合わせて変えてOK
-
-      rc.innerHTML = `
-    <div class="result-wrapper">
-      <h2 class="result-title">あなたの食事タイプ</h2>
-      <div class="result-code">${typeCode}</div>
-
-      <div class="result-main-card">
-        <div class="main-card-image">
-          <img src="${detail.image}" alt="${detail.name}">
-        </div>
-        <div>
-          <h3>${detail.name}</h3>
-          <p>${detail.description}</p>
-          ${label ? `<span class="group-label">${label}</span>` : ""}
-        </div>
-      </div>
-    </div>
-  `;
-    }
-
-    const resultArea = byId("result-area");
-    if (resultArea) resultArea.style.display = "block";
-
-    // myType 保存
-    localStorage.setItem("myType", typeCode);
-
-    // ボタン
-    // ✅ result-area 最下部にアクションボタンを配置（あるあるの下に来る）
-    if (resultArea) {
-      // 二重生成防止
-      const old = resultArea.querySelector(".result-actions-wrap");
-      if (old) old.remove();
-
-      const wrap = document.createElement("div");
-      wrap.className = "result-actions-wrap d-grid gap-2 mt-4";
-
-      // 掲示板URLはあなたの実URLに合わせて（/board/でOKならそのまま）
-      const boardUrl = "/board/";
-
-      wrap.innerHTML = `
-    <button class="btn btn-outline-secondary" id="retry-btn">もう一度診断する</button>
-    <a href="${boardUrl}" class="btn btn-success" id="go-board-btn">掲示板で自分のタイプを見る</a>
-  `;
-      resultArea.appendChild(wrap);
-
-      // retry はここで必ず取れる（生成後）
-      const retryBtn = wrap.querySelector("#retry-btn");
-      if (retryBtn) retryBtn.onclick = () => window.location.reload();
-    }
-    // go-board-btn は <a> のhrefを使う（onclick上書きしない）
+    window.location.href = ROUTES.result;
   });
 }
 
 /* =========================
-   スタート
+   ✅ result.html：結果描画
+========================= */
+function renderResultFromStorage() {
+  if (!resultsLoaded) return;
+
+  const raw = sessionStorage.getItem(STORAGE_KEYS.result);
+  if (!raw) {
+    window.location.href = ROUTES.index;
+    return;
+  }
+
+  let payload = null;
+  try {
+    payload = JSON.parse(raw);
+  } catch {
+    window.location.href = ROUTES.index;
+    return;
+  }
+
+  const typeCode = payload?.typeCode;
+  const axisScores = payload?.axisScores;
+
+  if (!typeCode || !axisScores) {
+    window.location.href = ROUTES.index;
+    return;
+  }
+
+  const detail = results?.detail_types?.[typeCode];
+  if (!detail) {
+    console.error("detail_types に typeCode が見つからない:", typeCode);
+    alert("結果データが見つかりませんでした。results.json を確認してください。");
+    window.location.href = ROUTES.index;
+    return;
+  }
+
+  const groupKey = detail.group || "";
+  const groupObj = results?.groups?.[groupKey] || null;
+
+  // テーマ適用
+  resetThemeState();
+  applyGroupTheme({ typeCode, groupKey, groupObj });
+
+  // ✅ 透かしを確実に出す
+  const wm = byId("result-watermark");
+  if (wm) wm.textContent = typeCode;
+
+  // 性格特性バー描画
+  const traitContainer = byId("trait-bars");
+  if (traitContainer) {
+    traitContainer.innerHTML = "";
+    for (let axis in axisScores) {
+      const percent = scoreToPercent(axisScores[axis]);
+      const meta = traitMeta[axis];
+      const isRight = percent >= 50;
+      const label = isRight ? meta.right : meta.left;
+
+      traitContainer.innerHTML += `
+        <div class="trait-bar" style="--p:${percent}">
+          <div class="trait-label left">${meta.left}</div>
+          <div class="bar-wrapper">
+            <div class="bar ${meta.color}">
+              <div class="bar-fill" style="width:${percent}%"></div>
+              <div class="bar-dot" style="left:${percent}%"></div>
+            </div>
+            <div class="bar-percent ${meta.color}">${percent}% ${label}</div>
+          </div>
+          <div class="trait-label right">${meta.right}</div>
+        </div>
+      `;
+    }
+  }
+
+  // 向いている食事シーン
+  const sceneList = byId("scene-list");
+  if (sceneList) {
+    sceneList.innerHTML = "";
+    (detail.scenes || []).forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = s;
+      sceneList.appendChild(li);
+    });
+  }
+
+  // ストレス
+  const stressList = byId("stress-list");
+  if (stressList) {
+    stressList.innerHTML = "";
+    (detail.stress || []).forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = s;
+      stressList.appendChild(li);
+    });
+  }
+
+  // あるある（増殖防止）
+  const section = $(".personality-section");
+  if (section) {
+    const oldAruaru = section.querySelector(".aruaru-section");
+    if (oldAruaru) oldAruaru.remove();
+
+    if (detail.aruaru && detail.aruaru.length) {
+      const aruaruHTML = document.createElement("div");
+      aruaruHTML.className = "aruaru-section";
+      aruaruHTML.innerHTML = `
+        <h3 class="aruaru-title">このタイプのあるある</h3>
+        <ul class="aruaru-list">${detail.aruaru.map(i => `<li>${i}</li>`).join("")}</ul>
+      `;
+      section.appendChild(aruaruHTML);
+    }
+  }
+
+  // メインカード（ヒーローだけに注入）
+  const rc = byId("result-content");
+  if (rc) {
+    const label = groupObj?.label ?? groupKey ?? "";
+    const tags = (detail.aruaru || []).slice(0, 3);
+
+    rc.innerHTML = `
+      <div class="result-main-card">
+        <div class="main-card-image">
+          <img src="${detail.image}" alt="${detail.name}">
+        </div>
+
+        <div class="hero-text">
+          <h3>${detail.name}</h3>
+          <p>${detail.description}</p>
+
+          <div class="hero-badges">
+            ${label ? `<span class="group-label">${label}</span>` : ""}
+            ${tags.map(t => `<span class="tag-pill">${t}</span>`).join("")}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // result-area 表示
+  const resultArea = byId("result-area");
+  if (resultArea) resultArea.style.display = "block";
+
+  // ✅ CTA：既存があれば使い、なければ作る（重複防止）
+  let wrap = resultArea ? resultArea.querySelector(".result-actions-wrap") : null;
+  if (!wrap && resultArea) {
+    wrap = document.createElement("div");
+    wrap.className = "result-actions-wrap d-grid gap-2 mt-4";
+    resultArea.appendChild(wrap);
+  }
+  if (wrap) {
+    wrap.classList.add("d-grid", "gap-2", "mt-4");
+    wrap.innerHTML = `
+      <a class="btn btn-outline-secondary" href="${ROUTES.index}">もう一度診断する</a>
+      <a href="${ROUTES.board}" class="btn btn-success">掲示板で自分のタイプを見る</a>
+    `;
+  }
+}
+
+/* =========================
+   ✅ index.html：スタート
 ========================= */
 function setupStart() {
   const startBtn = byId("start-btn");
   if (!startBtn) return;
 
   startBtn.addEventListener("click", async () => {
-    // ✅ 診断開始時は必ず result-mode と data-group を消す
     resetThemeState();
 
     if (!questionsLoaded || !resultsLoaded) {
@@ -508,7 +553,6 @@ function setupStart() {
     if (qContainer) qContainer.style.display = "block";
     if (pContainer) pContainer.style.display = "block";
 
-    // 上ヘッダー/下フッター表示
     showHeaderFooter();
 
     currentPage = 0;
@@ -518,18 +562,31 @@ function setupStart() {
 }
 
 /* =========================
+   ページ判定
+========================= */
+function isResultPage() {
+  if (document.body?.dataset?.page === "result") return true;
+
+  const hasResultDom = !!byId("result-area") || !!byId("result-content");
+  const hasQuestionDom = !!$(".questions-container") || !!byId("start-btn") || !!byId("diagnose-btn");
+  return hasResultDom && !hasQuestionDom;
+}
+
+/* =========================
    初期化
 ========================= */
 document.addEventListener("DOMContentLoaded", async () => {
-  // ✅ まずテーマ汚染を消す（トップが変になるのを防止）
   resetThemeState();
-
-  // 先にロードしておく（スタート後が速い）
   await loadData();
 
-  setupStart();
-  setupDiagnose();
+  if (isResultPage()) {
+    hideHeaderFooter();
+    renderResultFromStorage();
+    return;
+  }
 
-  // 初期状態ではヘッダー/フッターは隠す
+  setupStart();
+  setupNextButton();
+  setupDiagnose();
   hideHeaderFooter();
 });

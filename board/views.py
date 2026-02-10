@@ -5,6 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 import json
 from .models import Post
+from django.shortcuts import render
+
+def result(request):
+    return render(request, "board/result.html")
+
 
 # ============================
 # 投稿一覧（誰でもOK）
@@ -41,7 +46,8 @@ def posts_by_type(request, type):
                 ),
                 "user": {
                     "id": p.user.id,
-                    "nickname": profile.nickname if profile else p.user.username,
+                    "username": p.user.username,
+                    "nickname": (profile.nickname if profile and profile.nickname else p.user.username),
                     "icon": profile.icon.url if profile and profile.icon else None,
                 }
             })
@@ -61,14 +67,30 @@ def create_post(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST only"}, status=405)
 
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "login required"}, status=401)
+
     body = json.loads(request.body)
+
     post = Post.objects.create(
         user=request.user,
-        type=body["type"],
-        text=body["text"]
+        type=body.get("type"),
+        text=body.get("text", "")
     )
 
-    profile = request.user.profile
+    profile = getattr(request.user, "profile", None)
+
+    nickname = (
+        profile.nickname
+        if profile and getattr(profile, "nickname", "")
+        else request.user.username
+    )
+
+    icon = (
+        profile.icon.url
+        if profile and getattr(profile, "icon", None)
+        else None
+    )
 
     return JsonResponse({
         "id": post.id,
@@ -76,11 +98,13 @@ def create_post(request):
         "likes": 0,
         "is_mine": True,
         "user": {
+            "id": request.user.id,
             "username": request.user.username,
-            "nickname": profile.nickname,
-            "icon": profile.icon.url if profile.icon else None
+            "nickname": nickname,  # ← 空なら username にする
+            "icon": icon
         }
     })
+
 
 
 # ============================
@@ -175,3 +199,7 @@ def board_page(request):
     return render(request, "board/board.html") 
 
 print("📂 board.views loaded")
+
+
+def result(request):
+    return render(request, "board/result.html")

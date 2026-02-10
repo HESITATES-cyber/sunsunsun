@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>🍽️ 診断結果</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/result.css' %}">
+</head>
+
+<body data-page="result" class="result-page">
+  <main class="diagnosis-main">
+    <div class="container">
+
+      <!-- 診断結果 -->
+      <section id="result-area" class="mt-4">
+
+        <!-- ✅ 1枚の外枠カード（レポート） -->
+        <div class="result-sheet">
+
+          <!-- 右上 透かし（JSで typeCode を差し込む） -->
+          <div class="result-watermark" id="result-watermark" aria-hidden="true"></div>
+
+          <!-- ヘッダー（タイトル固定） -->
+          <header class="result-header">
+            <h1 class="result-title">あなたの食事タイプ</h1>
+            <!-- 任意：タイプコード等を小さく表示したい時だけ使う -->
+            <div class="result-code" id="result-code" style="display:none;"></div>
+          </header>
+
+          <!-- ✅ ヒーロー（script.js がここに注入） -->
+          <section id="result-content" class="result-content"></section>
+
+          <!-- ✅ 性格特性 -->
+          <section class="personality-section">
+            <h2 class="section-title">
+              <span class="section-number">1</span> 性格特性
+            </h2>
+
+            <div id="trait-bars"></div>
+
+            <div class="scene-stress-grid">
+              <div class="scene-card">
+                <h4>🍽️ 向いている食事シーン</h4>
+                <ul id="scene-list"></ul>
+              </div>
+
+              <div class="scene-card">
+                <h4>⚡ ストレスになりやすいこと</h4>
+                <ul id="stress-list"></ul>
+              </div>
+            </div>
+
+            <!-- ✅ あるあるは script.js がここ（.personality-sectionの最後）に挿入 -->
+          </section>
+
+        </div>
+        <!-- ✅ /result-sheet -->
+
+        <!-- ✅ CTA：レポートカードの“外”に配置（JSが作り直す前提でもOK） -->
+        <div class="result-actions-wrap">
+          <a class="btn btn-outline-secondary" href="/" id="retry-btn">もう一度診断する</a>
+          <a class="btn btn-success" href="/board/" id="board-btn">掲示板で自分のタイプを見る</a>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
