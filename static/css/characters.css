@@ -1,66 +1,87 @@
-/* ===============================
-   CHARACTER THEME VARIABLES
-=============================== */
-:root {
-  --bg-page: #f7fbfa;
-  --card-bg: #ffffff;
-  --text-main: #222;
-  --text-sub: #555;
+/* ============================================================
+   character.css（整理版）
+   - ページ背景 / カード / タイプ色 / dark mode
+============================================================ */
 
-  --shadow-normal: 0 14px 34px rgba(0,0,0,0.12);
-  --shadow-hover: 0 22px 48px rgba(0,0,0,0.18);
+/* ============================================================
+   0) TOKENS（共通変数）
+============================================================ */
+:root{
+  /* Page */
+  --character-bg: #f7fbfa;
 
-  /* タイプ別カラー */
-  --cw-bg: #fff0f0;
-  --cw-text: #942f2f;
+  /* Card */
+  --character-card-bg: #ffffff;
+  --character-radius: 24px;
+  --character-pad-y: 36px;
+  --character-pad-x: 24px;
 
-  --cx-bg: #f3f6ff;
-  --cx-text: #2d4da6;
+  /* Text */
+  --character-text: #222;
+  --character-muted: #555;
 
-  --sw-bg: #f7f7f7;
-  --sw-text: #3f3f3f;
+  /* Effects */
+  --character-shadow: 0 14px 34px rgba(0,0,0,0.12);
+  --character-shadow-hover: 0 22px 48px rgba(0,0,0,0.18);
+  --character-hover-y: -8px;
+  --character-hover-scale: 1.03;
 
-  --sx-bg: #faf4ff;
-  --sx-text: #59287a;
+  /* Image */
+  --character-img-max: 400px;
+  --character-img-max-sp: 180px;
+
+  /* Type colors */
+  --type-cw-bg: #fff0f0;
+  --type-cw-text: #942f2f;
+
+  --type-cx-bg: #f3f6ff;
+  --type-cx-text: #2d4da6;
+
+  --type-sw-bg: #f7f7f7;
+  --type-sw-text: #3f3f3f;
+
+  --type-sx-bg: #faf4ff;
+  --type-sx-text: #59287a;
 }
 
-body.dark {
-  --bg-page: #0f172a;
-  --card-bg: #111827;
-  --text-main: #e5e7eb;
-  --text-sub: #94a3b8;
+/* Dark mode（必要最小限だけ上書き） */
+body.dark{
+  --character-bg: #0f172a;
+  --character-card-bg: #111827;
+  --character-text: #e5e7eb;
+  --character-muted: #94a3b8;
 }
 
-/* ===============================
-   PAGE
-=============================== */
-body {
-  background: var(--bg-page);
+/* ============================================================
+   1) PAGE / LAYOUT
+   ※ bodyに全ページ共通CSSがあるなら、ここはスコープ推奨
+============================================================ */
+
+/* 可能なら：body.character-page { ... } に変えるのが安全 */
+body{
+  background: var(--character-bg);
 }
 
-/* ===============================
-   LAYOUT
-=============================== */
-#character-list {
+#character-list{
   max-width: 1600px;
   margin: 0 auto;
 }
 
-.type-row {
+.type-row{
   margin-bottom: 4rem;
 }
 
-/* ===============================
-   CARD BASE
-=============================== */
-.character-card {
+/* ============================================================
+   2) CARD BASE
+============================================================ */
+.character-card{
   height: 100%;
-  padding: 36px 24px;
-  border-radius: 24px;
-  background: var(--card-bg);
+  padding: var(--character-pad-y) var(--character-pad-x);
+  border-radius: var(--character-radius);
+  background: var(--character-card-bg);
   text-align: center;
 
-  box-shadow: var(--shadow-normal);
+  box-shadow: var(--character-shadow);
   transition: transform .25s ease, box-shadow .25s ease;
 
   display: flex;
@@ -68,15 +89,13 @@ body {
   align-items: center;
 }
 
-.character-card:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: var(--shadow-hover);
+.character-card:hover{
+  transform: translateY(var(--character-hover-y)) scale(var(--character-hover-scale));
+  box-shadow: var(--character-shadow-hover);
 }
 
-/* ===============================
-   TYPE CODE
-=============================== */
-.type-code {
+/* Type code */
+.type-code{
   font-weight: 700;
   font-size: 1.05rem;
   letter-spacing: .12em;
@@ -84,73 +103,54 @@ body {
   opacity: .85;
 }
 
-/* ===============================
-   IMAGE
-=============================== */
-.character-card img {
+/* Image */
+.character-card img{
   width: auto;
-  max-width: 400px;
+  max-width: var(--character-img-max);
   height: auto;
   margin-bottom: 20px;
   display: block;
 }
 
-/* ===============================
-   NAME & TEXT
-=============================== */
-.character-card h3 {
+/* Name & text */
+.character-card h3{
   font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: .6rem;
-  color: var(--text-main);
+  color: var(--character-text);
 }
 
-.character-card p {
+.character-card p{
   font-size: .95rem;
   line-height: 1.7;
-  color: var(--text-sub);
+  color: var(--character-muted);
 }
 
-/* ===============================
-   TYPE VARIATIONS
-=============================== */
-.character-card.type-cw {
-  background: var(--cw-bg);
-}
-.character-card.type-cw .type-code {
-  color: var(--cw-text);
-}
+/* ============================================================
+   3) TYPE VARIATIONS
+   - 追加しやすい構造に整理
+============================================================ */
+.character-card.type-cw{ background: var(--type-cw-bg); }
+.character-card.type-cw .type-code{ color: var(--type-cw-text); }
 
-.character-card.type-cx {
-  background: var(--cx-bg);
-}
-.character-card.type-cx .type-code {
-  color: var(--cx-text);
-}
+.character-card.type-cx{ background: var(--type-cx-bg); }
+.character-card.type-cx .type-code{ color: var(--type-cx-text); }
 
-.character-card.type-sw {
-  background: var(--sw-bg);
-}
-.character-card.type-sw .type-code {
-  color: var(--sw-text);
-}
+.character-card.type-sw{ background: var(--type-sw-bg); }
+.character-card.type-sw .type-code{ color: var(--type-sw-text); }
 
-.character-card.type-sx {
-  background: var(--sx-bg);
-}
-.character-card.type-sx .type-code {
-  color: var(--sx-text);
-}
+.character-card.type-sx{ background: var(--type-sx-bg); }
+.character-card.type-sx .type-code{ color: var(--type-sx-text); }
 
-/* ===============================
-   MOBILE
-=============================== */
-@media (max-width: 576px) {
-  .character-card {
-    padding: 28px 18px;
+/* ============================================================
+   4) MOBILE
+============================================================ */
+@media (max-width: 576px){
+  .character-card{
+    padding: 28px 18px; /* ここだけは可読性のため直書きでもOK */
   }
 
-  .character-card img {
-    max-width: 180px;
+  .character-card img{
+    max-width: var(--character-img-max-sp);
   }
 }

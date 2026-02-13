@@ -1,11 +1,7 @@
 // =====================================================
-// board.js  (FULL / 上書き用 完全版・クリック死亡対策版)
-// - 投稿カードは CSS(grid) 前提：div.post の直下に
-//   [icon, header, text, actions] を入れる
-// - 時刻は 24時間以内：xx分前/xx時間前, 以降：YYYY/MM/DD
-// - 1分ごとに相対時間を更新（.post-time）
-// - モーダルは全て class="modal hidden" で統一（投稿/編集/確認）
-// - ✅ click が発火しない環境でも、編集/削除/いいねが必ず動く（pointerup採用）
+// board.js（整理版）
+// - pointerup + click(保険) は維持
+// - 投稿アクションはイベント委譲（重くならない）
 // =====================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -38,11 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const myType = myTypeRaw ? myTypeRaw.toLowerCase() : null;
 
   let currentType = null;
-  window.currentType = null;
 
-  // posts
+  // posts（type -> array）
   const posts = {};
-  window.posts = posts;
   GROUPS.forEach(g => g.types.forEach(t => (posts[t] = [])));
 
   // =========================
@@ -70,9 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const confirmYes = document.getElementById("confirm-yes");
   const confirmNo = document.getElementById("confirm-no");
 
-  // =========================
   // 自分のタイプ表示
-  // =========================
   const myTypeCode = document.getElementById("my-type-code");
   if (myTypeCode && myType) myTypeCode.textContent = myType.toUpperCase();
 
@@ -88,19 +80,16 @@ document.addEventListener("DOMContentLoaded", () => {
     m.classList.add("hidden");
   }
 
-  // 起動時：hidden付け忘れ保険
   closeModal(postModal);
   closeModal(editModal);
   closeModal(confirmModal);
 
-  // 背景クリックで閉じる（投稿）
   if (postModal) {
     postModal.addEventListener("click", (e) => {
       if (e.target === postModal) closeModal(postModal);
     });
   }
 
-  // Escで全部閉じる
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       closeModal(postModal);
@@ -111,39 +100,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // =========================
   // ✅ click死亡対策：安全なボタンバインド
-  // pointerup + click(保険) を貼る / 二重実行ガード付き
   // =========================
   function bindPress(el, handler, opts = {}) {
     if (!el) return;
 
-    const {
-      capture = true,
-      prevent = true,
-      stop = true
-    } = opts;
+    const { capture = true, prevent = true, stop = true } = opts;
 
     let last = 0;
     const run = (e) => {
-      // 二重実行防止（pointerup→click の連続など）
       const now = Date.now();
       if (now - last < 350) return;
       last = now;
 
       if (prevent) e.preventDefault();
       if (stop) e.stopPropagation();
-
       handler(e);
     };
 
-    // まず pointerup（clickが死んでても確実に来る）
     el.addEventListener("pointerup", run, { capture });
-
-    // 念のため click も（環境によっては pointerup が来ないこともある）
     el.addEventListener("click", run, { capture });
   }
 
   // =========================
-  // API helper
+  // API helper（JSON/ログイン判定統一）
   // =========================
   async function apiFetch(url, options = {}) {
     const res = await fetch(url, {
@@ -156,20 +135,24 @@ document.addEventListener("DOMContentLoaded", () => {
       ...options
     });
 
-    const contentType = res.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      console.error("JSONではないレスポンス:", await res.text());
-      alert("ログインが必要です");
-      location.href = "/accounts/login/";
-      throw new Error("Not JSON response");
+    // DELETEなどで空レスポンスの可能性がある
+    const contentType = res.headers.get("content-type") || "";
+    const isJson = contentType.includes("application/json");
+
+    if (!res.ok) {
+      // JSONじゃない=ログイン切れ等を疑う
+      if (!isJson) {
+        alert("ログインが必要です");
+        location.href = "/accounts/login/";
+      }
+      throw new Error(`API error: ${res.status}`);
     }
 
-    if (!res.ok) throw new Error(`API error: ${res.status}`);
     return res;
   }
 
   // =========================
-  // Twitter風 時刻表示
+  // 時刻表示
   // =========================
   function formatTwitterTime(isoString) {
     if (!isoString) return "";
@@ -224,16 +207,23 @@ document.addEventListener("DOMContentLoaded", () => {
     await loadPosts();
   }
 
-  async function deletePost(id) {
-    const res = await fetch(`${API_BASE}/posts/${id}/`, {
-      method: "DELETE",
-      headers: { "X-CSRFToken": csrftoken },
-      credentials: "include"
+  async function updatePost(id, text) {
+    const res = await apiFetch(`${API_BASE}/posts/${id}/`, {
+      method: "PUT",
+      body: JSON.stringify({ text })
     });
-    if (!res.ok) throw new Error("削除失敗");
+    return res.json();
   }
 
-  async function toggleLikePost(post) {
+  async function deletePost(id) {
+    await apiFetch(`${API_BASE}/posts/${id}/`, { method: "DELETE" });
+  }
+
+  async function toggleLikePost(postId) {
+    const list = posts[currentType] || [];
+    const post = list.find(p => String(p.id) === String(postId));
+    if (!post) return;
+
     const res = await apiFetch(`${API_BASE}/posts/${post.id}/like/`, { method: "POST" });
     const data = await res.json();
     post.likes = data.likes;
@@ -242,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =========================
-  // 編集・確認（投稿モーダルと同デザインで）
+  // 編集・確認
   // =========================
   function editAsync(initialText) {
     return new Promise(resolve => {
@@ -257,7 +247,6 @@ document.addEventListener("DOMContentLoaded", () => {
         resolve(val);
       };
 
-      // 以前のonclickを消してから貼る（積み重なり事故防止）
       editOk.onclick = null;
       editCancel.onclick = null;
 
@@ -298,7 +287,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   function initTypeList() {
     if (!typeList) return;
-
     typeList.innerHTML = "";
 
     GROUPS.forEach(group => {
@@ -316,7 +304,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <img src="/static/img/types/${type}.png" alt="${type}">
           <strong>${type.toUpperCase()}</strong>
         `;
-        // タイプボタンも pointerup で安全に
         bindPress(btn, () => switchType(type), { capture: true, prevent: true, stop: true });
         typeList.appendChild(btn);
       });
@@ -360,7 +347,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!type) return;
 
     currentType = type.toLowerCase();
-    window.currentType = currentType;
 
     document.querySelectorAll(".type-btn").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.type === type);
@@ -369,7 +355,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const title = document.getElementById("board-title");
     if (title) title.textContent = `${type.toUpperCase()}タイプの掲示板`;
 
-    // 画面切替時はモーダル類閉じる
     closeModal(postModal);
     closeModal(editModal);
     closeModal(confirmModal);
@@ -404,9 +389,14 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // DocumentFragmentで軽くする
+    const frag = document.createDocumentFragment();
+
     list.forEach(post => {
       const div = document.createElement("div");
       div.className = "post";
+      div.dataset.postId = post.id;
+      div.dataset.isMine = post.is_mine ? "1" : "0";
       if (post.is_mine) div.classList.add("my-post");
 
       const icon = document.createElement("img");
@@ -440,70 +430,84 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const actions = document.createElement("div");
       actions.className = "post-actions";
+
+      // data-action で委譲（ここが整理のキモ）
+      const likeLabel = `❤️ ${post.likes || 0}`;
       actions.innerHTML = `
-        <button class="like-btn" type="button">❤️ ${post.likes || 0}</button>
+        <button type="button" class="like-btn ${post.is_liked ? "liked" : ""}" data-action="like">${likeLabel}</button>
         ${
           post.is_mine
-            ? `<button class="edit-btn" type="button">✏</button>
-               <button class="delete-btn" type="button">🗑</button>`
+            ? `<button type="button" class="edit-btn" data-action="edit">✏</button>
+               <button type="button" class="delete-btn" data-action="delete">🗑</button>`
             : ""
         }
       `;
 
       div.append(icon, header, text, actions);
+      frag.appendChild(div);
+    });
 
-      // いいね（✅ pointerupで確実に）
-      const likeBtn = div.querySelector(".like-btn");
-      if (likeBtn) {
-        if (post.is_liked) likeBtn.classList.add("liked");
-        bindPress(likeBtn, () => toggleLikePost(post));
-      }
+    postList.appendChild(frag);
+  }
 
-      // 編集・削除（✅ pointerupで確実に）
-      if (post.is_mine) {
-        const editBtn = div.querySelector(".edit-btn");
-        const deleteBtn = div.querySelector(".delete-btn");
+  // =========================
+  // ✅ 投稿アクション：イベント委譲（postListに1回だけ）
+  // =========================
+  if (postList) {
+    const handlePostAction = async (e) => {
+      const btn = e.target.closest("[data-action]");
+      if (!btn) return;
 
-        bindPress(editBtn, async () => {
+      const postEl = btn.closest(".post");
+      if (!postEl) return;
+
+      const action = btn.dataset.action;
+      const postId = postEl.dataset.postId;
+
+      try {
+        if (action === "like") {
+          await toggleLikePost(postId);
+          return;
+        }
+
+        if (action === "edit") {
+          const list = posts[currentType] || [];
+          const post = list.find(p => String(p.id) === String(postId));
+          if (!post) return;
+
           const newText = await editAsync(post.text);
           if (newText === null) return;
 
-          try {
-            const res = await apiFetch(`${API_BASE}/posts/${post.id}/`, {
-              method: "PUT",
-              body: JSON.stringify({ text: newText })
-            });
-            const data = await res.json();
-            post.text = data.text;
-            renderPosts();
-          } catch (e) {
-            alert("編集に失敗しました");
-            console.error(e);
-          }
-        });
+          const data = await updatePost(post.id, newText);
+          post.text = data.text;
+          renderPosts();
+          return;
+        }
 
-        bindPress(deleteBtn, async () => {
+        if (action === "delete") {
           const ok = await confirmAsync();
           if (!ok) return;
 
-          try {
-            await deletePost(post.id);
-            posts[currentType] = posts[currentType].filter(p => p.id !== post.id);
-            renderPosts();
-          } catch (e) {
-            alert("削除に失敗しました");
-            console.error(e);
-          }
-        });
+          await deletePost(postId);
+          posts[currentType] = (posts[currentType] || []).filter(p => String(p.id) !== String(postId));
+          renderPosts();
+          return;
+        }
+      } catch (err) {
+        console.error(err);
+        alert("操作に失敗しました");
       }
+    };
 
-      postList.appendChild(div);
-    });
+    // pointerup + click 両方で委譲（click死亡対策を維持）
+    postList.addEventListener("pointerup", handlePostAction, true);
+    postList.addEventListener("click", handlePostAction, true);
   }
 
-  // 1分ごとに相対時間更新
+  // 1分ごとに相対時間更新（postList内だけに限定）
   setInterval(() => {
-    document.querySelectorAll(".post-time[data-created-at]").forEach(el => {
+    if (!postList) return;
+    postList.querySelectorAll(".post-time[data-created-at]").forEach(el => {
       el.textContent = formatTwitterTime(el.dataset.createdAt);
     });
   }, 60 * 1000);
@@ -512,7 +516,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // 投稿モーダル
   // =========================
   if (fab) {
-    // ✅ fab も pointerup で安全に
     bindPress(fab, () => {
       if (currentType !== myType) {
         alert("自分のタイプの掲示板でのみ投稿できます");
@@ -523,11 +526,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (cancelBtn) {
-    bindPress(cancelBtn, () => closeModal(postModal));
-  }
+  if (cancelBtn) bindPress(cancelBtn, () => closeModal(postModal));
 
-  // 入力が空なら投稿ボタンを無効化（UX）
+  // 入力が空なら投稿ボタンを無効化
   const syncSubmitState = () => {
     if (!submitBtn || !postText) return;
     submitBtn.disabled = !postText.value.trim();

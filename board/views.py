@@ -12,7 +12,7 @@ def result(request):
 
 
 # ============================
-# 投稿一覧（誰でもOK）
+# 投稿一覧
 # ============================
 print("🔥 THIS views.py IS USED 🔥")
 
@@ -100,7 +100,7 @@ def create_post(request):
         "user": {
             "id": request.user.id,
             "username": request.user.username,
-            "nickname": nickname,  # ← 空なら username にする
+            "nickname": nickname,  
             "icon": icon
         }
     })
@@ -189,7 +189,6 @@ def index(request):
 # キャラクター一覧ページ
 # ============================
 def characters(request):
-    # ここでキャラクター一覧用テンプレートを返す
     return render(request, "board/characters.html")
 
 # ============================

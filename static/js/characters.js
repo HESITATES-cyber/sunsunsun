@@ -1,52 +1,91 @@
 /* =========================
-   キャラクター一覧描画
+   キャラクター一覧描画（整理版）
+   - innerHTMLを使わず安全に描画
+   - ソートして順序を安定化
 ========================= */
-fetch("/static/data/results.json")
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById("character-list");
-    const types = data.detail_types;
 
-    const rows = {
-      CW: [],
-      CX: [],
-      SW: [],
-      SX: []
-    };
+(async () => {
+  const container = document.getElementById("character-list");
+  if (!container) return;
 
-    // タイプ振り分け（コードの1文字目 + 4文字目で行判定）
-    Object.entries(types).forEach(([code, info]) => {
-      const key = code.charAt(0) + code.charAt(3); // C/S + W/X
-      if (rows[key]) {
-        rows[key].push({ code, ...info });
-      }
-    });
+  try {
+    const res = await fetch("/static/data/results.json", { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    // 行ごとに描画
-    Object.entries(rows).forEach(([key, items]) => {
-      if (items.length === 0) return; // 空行はスキップ
+    const data = await res.json();
+    const types = data?.detail_types || {};
+
+    // CW/CX/SW/SX の行箱
+    const rows = { CW: [], CX: [], SW: [], SX: [] };
+
+    // タイプ振り分け（C/S + W/X）
+    for (const [codeRaw, info] of Object.entries(types)) {
+      const code = String(codeRaw || "");
+      if (code.length < 4) continue;
+
+      const key = (code.charAt(0) + code.charAt(3)).toUpperCase();
+      if (!rows[key]) continue;
+
+      rows[key].push({
+        code,
+        name: info?.name ?? "",
+        description: info?.description ?? "",
+        image: info?.image ?? ""
+      });
+    }
+
+    // 行ごとに描画（DocumentFragmentで軽く）
+    const frag = document.createDocumentFragment();
+
+    for (const [key, items] of Object.entries(rows)) {
+      if (!items.length) continue;
+
+      // 並び順安定化（code昇順）
+      items.sort((a, b) => a.code.localeCompare(b.code));
 
       const section = document.createElement("section");
       section.className = `type-row ${key.toLowerCase()} mb-5`;
 
-      section.innerHTML = `
-        <div class="row g-4 justify-content-center">
-        ${items.map(item => `
-          <div class="col-6 col-md-3">
-            <div class="character-card type-${key.toLowerCase()}">
-              <div class="type-code">${item.code}</div>
-              <img src="${item.image}" alt="${item.name}">
-              <h3>${item.name}</h3>
-              <p>${item.description}</p>
-            </div>
-          </div>
-        `).join("")}
-        </div>  
-      `;
+      const row = document.createElement("div");
+      row.className = "row g-4 justify-content-center";
 
-      container.appendChild(section);
-    });
-  })
-  .catch(err => {
+      for (const item of items) {
+        const col = document.createElement("div");
+        col.className = "col-6 col-md-3";
+
+        const card = document.createElement("div");
+        card.className = `character-card type-${key.toLowerCase()}`;
+
+        const typeCode = document.createElement("div");
+        typeCode.className = "type-code";
+        typeCode.textContent = item.code;
+
+        const img = document.createElement("img");
+        img.src = item.image;
+        img.alt = item.name;
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        const h3 = document.createElement("h3");
+        h3.textContent = item.name;
+
+        const p = document.createElement("p");
+        p.textContent = item.description;
+
+        card.append(typeCode, img, h3, p);
+        col.appendChild(card);
+        row.appendChild(col);
+      }
+
+      section.appendChild(row);
+      frag.appendChild(section);
+    }
+
+    // 既存描画があるならクリアしてから追加（任意）
+    container.innerHTML = "";
+    container.appendChild(frag);
+
+  } catch (err) {
     console.error("キャラクター読み込みエラー:", err);
-  });
+  }
+})();

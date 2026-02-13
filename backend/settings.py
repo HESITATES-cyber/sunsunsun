@@ -120,6 +120,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# ログイン後に掲示板トップなどにリダイレクト
+#リダイレクト
 LOGIN_REDIRECT_URL = "/board/"
 LOGOUT_REDIRECT_URL = "/"

@@ -7,7 +7,7 @@ from django.apps import apps
 from django.utils import timezone
 
 
-# 16タイプ（あなたのboard.jsのGROUPSに合わせ）
+# 16タイプ
 DEFAULT_TYPES = [
     "cfew", "cmhw", "cmew", "cfhw",
     "cfhx", "cmex", "cfex", "cmhx",
@@ -37,7 +37,7 @@ DEMO_TEXTS = [
     "このタイプ同士だと話しやすい気がする",
 ]
 
-# 文章をちょい自然にする末尾
+# 文章末尾
 TAILS = ["", "！", "〜", "笑", "？", "…", "！🔥"]
 
 
@@ -54,7 +54,7 @@ class Command(BaseCommand):
         parser.add_argument("--prefix", type=str, default="demo_")
         parser.add_argument("--password", type=str, default="demo1234")
 
-        # 投稿をばら撒くタイプ（省略時は全16種）
+        # 投稿をばら撒くタイプ
         parser.add_argument(
             "--types",
             type=str,
@@ -78,7 +78,7 @@ class Command(BaseCommand):
 
         Post = apps.get_model("board", "Post")
 
-        # あるならProfileも更新（nickname / food_type）
+        # Profile更新（nickname / food_type）
         Profile = None
         try:
             Profile = apps.get_model("accounts", "Profile")
@@ -112,19 +112,18 @@ class Command(BaseCommand):
             demo_users_qs = User.objects.filter(username__startswith=prefix)
             demo_user_ids = list(demo_users_qs.values_list("id", flat=True))
 
-            # demo投稿を削除（userがdemo_のもの）
+            # demo投稿を削除
             if demo_user_ids:
                 deleted = Post.objects.filter(user_id__in=demo_user_ids).delete()
                 self.stdout.write(self.style.WARNING(f"🧹 Deleted demo posts: {deleted}"))
 
-            # demoユーザーも消したいならコメント外して使う（基本は残すでOK）
             # demo_users_qs.delete()
 
         # --- create/update demo users ---
         demo_users = []
         for i in range(users_n):
             display = DEMO_DISPLAY_NAMES[i % len(DEMO_DISPLAY_NAMES)]
-            username = f"{prefix}{i+1:02d}"  # demo_01...
+            username = f"{prefix}{i+1:02d}" 
 
             u, created = User.objects.get_or_create(
                 username=username,
@@ -139,12 +138,10 @@ class Command(BaseCommand):
                     u.first_name = display
                     u.save()
 
-            # Profileがあるなら nickname も入れる（表示が nickname 優先の環境対策）
             if Profile is not None:
                 p, _ = Profile.objects.get_or_create(user=u)
-                # 既にユーザー側で nick を運用してるなら上書きしたくない場合は条件を変えてOK
                 p.nickname = display
-                # food_type も適当に割り当て（あなたの制御に合わせて）
+                # food_type も適当に割り当て
                 if hasattr(p, "food_type"):
                     p.food_type = random.choice(types) if types else p.food_type
                 p.save()
@@ -159,11 +156,11 @@ class Command(BaseCommand):
 
             kwargs = {"user": u, text_field: text}
 
-            # type がある場合は必ず付ける（タイプ別掲示板に出る）
+            # type がある場合は必ず付ける
             if type_field:
                 kwargs[type_field] = random.choice(types) if types else random.choice(DEFAULT_TYPES)
 
-            # 日時を散らす（0〜days日前のランダム）
+            # 日時ランダム
             if created_field:
                 back_minutes = random.randint(0, days * 24 * 60)
                 kwargs[created_field] = now - timedelta(minutes=back_minutes)
