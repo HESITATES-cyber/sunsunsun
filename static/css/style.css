@@ -849,4 +849,23 @@ body.diagnosis-page.result-mode[data-group] .bar.purple .bar-dot {
   box-shadow: none;        /* 影を消す（好みで） */
 }
 
-/*テスト*/
+/* ===============================
+   Dark: Diagnosis（質問UIの視認性改善）
+=============================== */
+body.dark.diagnosis-page .question-card{
+  box-shadow: 0 10px 28px rgba(0,0,0,.45);
+}
+
+/* 非アクティブが暗すぎる問題を軽減 */
+body.dark.diagnosis-page .question-card{
+  opacity: .55;
+}
+body.dark.diagnosis-page .question-card.active{
+  opacity: 1;
+}
+
+/* 左右ラベルが黒系のままで見えない → 白系へ */
+body.dark.diagnosis-page .scale-label-left,
+body.dark.diagnosis-page .scale-label-right{
+  color: rgba(255,255,255,.70);
+}

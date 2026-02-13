@@ -402,3 +402,77 @@
     color: rgba(0,0,0,.70);
   }
   
+  /* ===============================
+   Dark: Result page
+=============================== */
+body.dark.result-page{
+  background:
+    radial-gradient(820px 420px at 50% 120px,
+      color-mix(in srgb, var(--tc) 18%, transparent),
+      transparent 70%),
+    linear-gradient(#0b1220, #0f172a) !important;
+}
+
+body.dark.result-page .result-sheet,
+body.dark.result-page .scene-card,
+body.dark.result-page .aruaru-section,
+body.dark.result-page .tag-pill{
+  background: var(--bg-card);
+  border-color: var(--border);
+  color: var(--text-main);
+}
+
+body.dark.result-page .trait-label,
+body.dark.result-page .bar-percent,
+body.dark.result-page .hero-text p,
+body.dark.result-page .scene-card li,
+body.dark.result-page .aruaru-list li{
+  color: rgba(255,255,255,.72);
+}
+
+body.dark.result-page .bar{
+  background: rgba(255,255,255,.12);
+}
+
+body.dark.result-page .bar-dot{
+  background: var(--bg-card);
+  box-shadow: 0 10px 22px rgba(0,0,0,.45);
+}
+
+body.dark.result-page .result-actions-wrap .btn-outline-secondary{
+  border-color: rgba(255,255,255,.22);
+  color: rgba(255,255,255,.78);
+}
+
+
+/* ===============================
+   Dark: 上の白いカード（result-main-card）を暗くする
+=============================== */
+body.dark.result-page .result-main-card{
+  background: rgba(17, 24, 39, 0.92) !important; /* #111827系 */
+  border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow: 0 18px 50px rgba(0,0,0,.55) !important;
+  color: rgba(241,245,249,.92) !important;
+}
+
+/* 中のテキスト（薄すぎ/黒すぎ対策） */
+body.dark.result-page .result-main-card *{
+  color: inherit;
+}
+
+/* ピル（スピード甘党とかの丸いタグ）が白すぎる場合 */
+body.dark.result-page .result-main-card .pill,
+body.dark.result-page .result-main-card .tag-pill,
+body.dark.result-page .result-main-card .badge{
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: rgba(241,245,249,.92) !important;
+}
+  /* ===============================
+   Dark: group-label 修正
+=============================== */
+body.dark.result-page .group-label{
+  background: rgba(255,255,255,.12) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  color: #e5e7eb !important;
+}

@@ -33,19 +33,19 @@
    ダークモード
 =============================== */
 body.dark{
-  --bg:#0f172a;
-  --card:#111827;
-  --card-soft:#0b1220;
+  --bg:#0b1220;
+  --card:#111c2d;
+  --card-soft:#0f1a2a;
 
-  --text:#e5e7eb;
-  --muted:#94a3b8;
-  --border:#1f2933;
+  --text:#f1f5f9;
+  --muted:#cbd5e1;
+  --border:#223049;
 
   --danger:#f87171;
   --danger-soft:#3b1b1b;
 
-  --shadow-sm:0 4px 12px rgba(0,0,0,.4);
-  --shadow-md:0 16px 32px rgba(0,0,0,.6);
+  --shadow-sm:0 6px 18px rgba(0,0,0,.45);
+  --shadow-md:0 20px 40px rgba(0,0,0,.60);
 }
 
 /* ===============================

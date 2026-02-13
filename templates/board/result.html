@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <title>🍽️ 診断結果</title>
@@ -12,6 +13,9 @@
 </head>
 
 <body data-page="result" class="result-page">
+  <!-- 共通ヘッダー（☀/🌙 + theme.js） -->
+  {% include "components/header.html" %}
+
   <main class="diagnosis-main">
     <div class="container">
 
@@ -72,5 +76,8 @@
   </main>
 
   <script src="{% static 'js/script.js' %}"></script>
+  <script defer src="{% static 'js/theme.js' %}"></script>
+
 </body>
+
 </html>
