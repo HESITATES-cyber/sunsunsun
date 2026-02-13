@@ -34,13 +34,13 @@
       });
     }
 
-    // 行ごとに描画（DocumentFragmentで軽く）
+    // 行ごとに描画
     const frag = document.createDocumentFragment();
 
     for (const [key, items] of Object.entries(rows)) {
       if (!items.length) continue;
 
-      // 並び順安定化（code昇順）
+      // 並び順安定化
       items.sort((a, b) => a.code.localeCompare(b.code));
 
       const section = document.createElement("section");
@@ -81,7 +81,6 @@
       frag.appendChild(section);
     }
 
-    // 既存描画があるならクリアしてから追加（任意）
     container.innerHTML = "";
     container.appendChild(frag);
 

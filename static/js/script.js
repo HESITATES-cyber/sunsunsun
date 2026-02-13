@@ -512,7 +512,6 @@ function renderResultFromStorage() {
   const resultArea = byId("result-area");
   if (resultArea) resultArea.style.display = "block";
 
-  // ✅ CTA：既存があれば使い、なければ作る（重複防止）
   let wrap = resultArea ? resultArea.querySelector(".result-actions-wrap") : null;
   if (!wrap && resultArea) {
     wrap = document.createElement("div");
